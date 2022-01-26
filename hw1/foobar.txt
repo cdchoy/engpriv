@@ -1,0 +1,3 @@
+This is a file for us to try resolving merge conflicts and the like. Everyone should sign this file with their name and push it. 
+
+-- Chris
