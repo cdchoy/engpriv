@@ -17,7 +17,7 @@
     ], 
 
     "background": {
-        "service_worker": "display.js"
+        "service_worker": "background.js"
     }, 
    
     "manifest_version": 3 
