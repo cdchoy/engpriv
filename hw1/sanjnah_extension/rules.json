@@ -3,6 +3,7 @@
     "id": 1,
     "priority":1,
     "action": { "type": "block" },
-    "condition": { "urlFilter": "xkcd.com", "resourceTypes":["main_frame"] }
+    "condition": { "urlFilter": "xkcd.com", "resourceTypes":
+["main_frame"] }  
   }
 ]
