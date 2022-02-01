@@ -1,23 +1,24 @@
-{
-"name": "Sanjnah domain blocker", 
-"version": "1.0",
-"description": "A simple domain blocker",
 
-"declarative_net_request": { 
-  "rule_resources": [{
-    "id": "ruleset_1", 
-    "enabled": true, 
-    "path": "rules.json"
-  }] 
-},
-  
-"permissions": [
-  "declarativeNetRequest"
-],
-  
-"background": [
-  "service_worker": "display.js"
-],
-  
-"manifest_version": 3 
-}
+{ 
+    "name": "Sanjnah domain blocker", 
+    "version": "2.0", 
+    "description": "A simple domain blocker", 
+   
+    "declarative_net_request": { 
+      "rule_resources": [{ 
+        "id": "ruleset_1", 
+        "enabled": true, 
+        "path": "rules.json" 
+      }] 
+    }, 
+   
+    "permissions": [ 
+      "declarativeNetRequest" 
+    ], 
+
+    "background": {
+        "service_worker": "display.js"
+    }, 
+   
+    "manifest_version": 3 
+  }  
