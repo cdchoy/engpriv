@@ -14,8 +14,9 @@
 "permissions": [
   "declarativeNetRequest"
 ],
+  
 "background": [
-  "service_worker": "background.js"
+  "service_worker": "display.js"
 ],
   
 "manifest_version": 3 
