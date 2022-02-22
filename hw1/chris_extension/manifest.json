@@ -1,5 +1,8 @@
 {
     "name": "Chris Domain Block",
+    "action": {
+        "default_popup": "popup.html"
+    },
     "version": "1.0",
     "description": "A simple domain blocker",
     "declarative_net_request": {
