@@ -132,4 +132,4 @@ dmypy.json
 .DS_Store
 
 # skip extension private key
-hw1/chris_extension.pem
+*.pem
