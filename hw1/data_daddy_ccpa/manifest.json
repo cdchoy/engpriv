@@ -1,10 +1,11 @@
 {
-    "name": "Chris Domain Block",
+    "name": "Data Daddy",
     "action": {
-        "default_popup": "popup.html"
+        "default_popup": "popup.html",
+        "default_title": "Click to show an alert"
     },
     "version": "1.0",
-    "description": "A simple domain blocker",
+    "description": "Kicking Data Broker Butts",
     "declarative_net_request": {
         "rule_resources": [{
             "id": "ruleset_1",
@@ -13,7 +14,7 @@
         }]
     },
     "permissions": [
-        "declarativeNetRequest"
+        "declarativeNetRequest", "activeTab", "scripting"
     ],
     "background": {
         "service_worker": "background.js"
