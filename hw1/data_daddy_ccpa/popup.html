@@ -11,7 +11,7 @@
       position: relative;
       border: 3px solid black;
     }
-    
+
     .center {
       margin: 0;
       position: absolute;
@@ -21,11 +21,12 @@
       transform: translate(-50%, -50%);
     }
     </style>
-      <div class="container">
-        <div class="center">
-          <button id="generateEmail" value="10">Generate Email</button>
-          <textarea id="userName" rows="3" cols="20" value="15">Enter your First and Last name here.</textarea>
-        </div>
+    
+    <div class="container">
+      <div class="center">
+        <button id="generateEmail" value="10" data-location="https://mail.google.com/mail/?view=cm&fs=1&to=someone@example.com&su=SUBJECT&body=BODY&bcc=someone.else@example.com" >Generate Email</button>
+        <textarea id="userName" rows="3" cols="20" value="15">Enter your First and Last name here.</textarea>
       </div>
+    </div>
   </body>
 </html>
