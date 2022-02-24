@@ -6,6 +6,12 @@
     <img src="datadaddyccpa.png" id="datadaddyccpa">
     <script src="popup.js"></script>
   <style>
+    body {
+      font-family: "DDG_ProximaNova", "Helvetica Neue", "Helvetica", "Segoe UI", "Nimbus Sans L", "Liberation Sans", "Open Sans", FreeSans, Arial, sans-serif;
+    }
+    input[type=generateEmail] {
+      font-family: "DDG_ProximaNova", "Helvetica Neue", "Helvetica", "Segoe UI", "Nimbus Sans L", "Liberation Sans", "Open Sans", FreeSans, Arial, sans-serif;
+    }
     .container {
       height: 100;
       position: relative;
@@ -20,12 +26,51 @@
       -ms-transform: translate(-50%, -50%);
       transform: translate(-50%, -50%);
     }
+
+    .right {
+      margin: 0;
+      position: absolute;
+      top: 25%;
+      left: 70%;
+      -ms-transform: translate(-50%, -50%);
+      transform: translate(-50%, -50%);
+    }
+
+    #dataBrokers{
+      font-size: 20px;
+      width:150px;
+      height:30px;
+      border-radius: 8px;
+    }
+    #userName{
+      font-size: 20px;
+      width:150;
+      height:30px;
+      border-radius: 8px;
+    }
+    #generateEmail{
+      font-size: 14px;
+      font-weight: normal;
+      color: #333333;
+      font-size: 30px;
+      color: White;
+      background-color:DodgerBlue;
+      border-radius: 8px;
+    }
     </style>
-    
+
     <div class="container">
       <div class="center">
-        <button id="generateEmail" value="10" data-location="https://mail.google.com/mail/?view=cm&fs=1&to=someone@example.com&su=SUBJECT&body=BODY&bcc=someone.else@example.com" >Generate Email</button>
-        <textarea id="userName" rows="3" cols="20" value="15">Enter your First and Last name here.</textarea>
+        <textarea id="userName" rows="2" cols="16" value="15">your_name...</textarea>
+        <button id="generateEmail" value="10" style="height:50px;width:300px" data-location="https://mail.google.com/mail/?view=cm&fs=1&to=someone@example.com&su=SUBJECT&body=BODY&bcc=someone.else@example.com" >Generate Email</button>
+      </div>
+      <div class="right">
+        <select name="dataBrokers" id="dataBrokers" rows="2" cols="16">
+          <option value="towerData">Tower Data</option>
+          <option value="db2">db2</option>
+          <option value="db3">db3</option>
+          <option value="db4">db4</option>
+        </select>
       </div>
     </div>
   </body>
