@@ -1,7 +1,7 @@
 var databroker_map = {
   "towerData": "privacy@towerdata.com",
-  "db2": "db1@gmail.com",
-  "db3": "db2@gmail.com",
+  "db2": "db2@gmail.com",
+  "db3": "db3@gmail.com",
   "db4": "db4@gmail.com"
 } //Hardcoded Values Right Now
 
