@@ -1,0 +1,44 @@
+.container {
+    height: 100;
+    position: relative;
+    border: 3px solid black;
+  }
+
+  .center {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+  }
+
+  .right {
+    margin: 0;
+    position: absolute;
+    top: 25%;
+    left: 70%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+  }
+
+  #dataBrokers{
+    font-size: 20px;
+    width:150px;
+    height:30px;
+    border-radius: 8px;
+  }
+  
+  #userName{
+    font-size: 20px;
+    width:150;
+    height:30px;
+    border-radius: 8px;
+  }
+
+  #generateEmail{
+    font-size: 30px;
+    color: White;
+    background-color:DodgerBlue;
+    border-radius: 8px;
+  }
