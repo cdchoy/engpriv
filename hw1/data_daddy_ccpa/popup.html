@@ -5,58 +5,12 @@
   <body>
     <img src="datadaddyccpa.png" id="datadaddyccpa">
     <script src="popup.js"></script>
-  <style>
-
-    .container {
-      height: 100;
-      position: relative;
-      border: 3px solid black;
-    }
-
-    .center {
-      margin: 0;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      -ms-transform: translate(-50%, -50%);
-      transform: translate(-50%, -50%);
-    }
-
-    .right {
-      margin: 0;
-      position: absolute;
-      top: 25%;
-      left: 70%;
-      -ms-transform: translate(-50%, -50%);
-      transform: translate(-50%, -50%);
-    }
-
-    #dataBrokers{
-      font-size: 20px;
-      width:150px;
-      height:30px;
-      border-radius: 8px;
-    }
-    
-    #userName{
-      font-size: 20px;
-      width:150;
-      height:30px;
-      border-radius: 8px;
-    }
-
-    #generateEmail{
-      font-size: 30px;
-      color: White;
-      background-color:DodgerBlue;
-      border-radius: 8px;
-    }
-    </style>
+    <link rel="stylesheet" href="popup.css">
 
     <div class="container">
       <div class="center">
         <!-- User Name and Generate Email buttons. -->
-        <textarea id="userName" rows="2" cols="16" value="15">your_name...</textarea>
+        <textarea id="userName" rows="2" cols="16" value="15" placeholder="your name..."></textarea>
         <button id="generateEmail" value="10" style="height:50px;width:300px" data-location="https://mail.google.com/mail/?view=cm&fs=1&to=someone@example.com&su=SUBJECT&body=BODY&bcc=someone.else@example.com" >Generate Email</button>
       </div>
       <div class="right">

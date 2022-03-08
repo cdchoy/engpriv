@@ -1,13 +1,18 @@
+var databroker_map = {
+  "towerData": "privacy@towerdata.com",
+  "db2": "db2@gmail.com",
+  "db3": "db3@gmail.com",
+  "db4": "db4@gmail.com"
+} //Hardcoded Values Right Now
+
 document.addEventListener('DOMContentLoaded', function() {
   // Create reference to "Generate Email" button
   var generateEmail = document.getElementById('generateEmail');
   // Add event listener to the generateEmail variable, specifying 'click'
   generateEmail.addEventListener('click', function() {
     var emailOne = "https://mail.google.com/mail/?view=cm&fs=1&to=";
-    // This 1's for u Bolor
-    // Data Broker Email Address
-    // Right here vvv
-    var emailTwo = "privacy@towerdata.com";
+    var e = document.getElementById("dataBrokers");
+    var emailTwo = databroker_map[e.value];
     var emailThree = "&su=";
     var emailFour = "Right to Access Request (Section 110 of the CCPA)";
     var emailFive = "&body=";
