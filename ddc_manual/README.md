@@ -12,7 +12,7 @@ and (2) learn how to build an extension himself.
 
 ## File Structure
 
-```
+```text
 ddc_manual/
 |- README.md
 |- manifest.json
