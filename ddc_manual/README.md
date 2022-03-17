@@ -7,7 +7,7 @@ Instead, it uses a maintained file that maps web domains to their:
 - RTK online request form URL
 - Contact Email for exercising CCPA rights
 
-Chris is re-building the extension mostly from scratch here to both (1) eliminate unused scraper code, 
+Chris is re-building the extension mostly from scratch here to both (1) eliminate unused scraper code,
 and (2) learn how to build an extension himself.
 
 ## File Structure
@@ -28,3 +28,5 @@ ddc_manual/
 ## Resources
 
 - [Chrome Extension Developers: Getting Started](https://developer.chrome.com/docs/extensions/mv3/getstarted/)
+- [ManifestV3 Field Summary](https://developer.chrome.com/docs/extensions/mv3/manifest/)
+- [Chrome API Reference](https://developer.chrome.com/docs/extensions/reference/)
