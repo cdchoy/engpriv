@@ -1,5 +1,11 @@
 // popup.js
 
+let urltext = document.getElementById("urltext");
+
+chrome.storage.sync.get("domain", ({domain}) => {
+    urltext.innerHTML = "You are on: " + domain
+})
+
 // * * Chrome Button Sample Code. todo rm * * //
 // Initialize button with user's preferred color
 let changeColor = document.getElementById("changeColor"); 

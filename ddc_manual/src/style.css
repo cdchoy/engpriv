@@ -1,8 +1,9 @@
 /* CSS Stylesheet for entire extension rather than by page or by element 
  * Reduces code reuse since we don't have a large extension to begin with. */
 
+
 /* CSS Code for button from Google extension tutorial */
-button {
+button.tutorial {
     height: 30px;
     width: 30px;
     outline: none;

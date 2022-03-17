@@ -1,25 +1,25 @@
 // background.js
 
 // * * Event Listeners * * //
-chrome.runtime.onInstalled.addListener(() => { // todo rm
-  let color = '#3aa757';
-  chrome.storage.sync.set({ color });
-  console.log('Default background color set to %cgreen', `color: ${color}`);
+chrome.runtime.onInstalled.addListener(() => { 
+  let color = '#3aa757'; // todo rm
+  chrome.storage.sync.set({ color }); // todo rm
+  console.log('Extension installed!');
 });
 
 chrome.tabs.onActivated.addListener(() => {
   // console.log('Tab Activated!');
-  updateCurrentUrl()
+  updateCurrentDomain()
 })
 
 chrome.tabs.onUpdated.addListener(() => {
   // console.log('Tab Updated!');
-  updateCurrentUrl()
+  updateCurrentDomain()
 })
 
 // * * Functions * * //
-async function updateCurrentUrl() {
-  let url = await chrome.tabs.query({active: true, currentWindow: true})
+async function getCurrentUrl() {
+  return await chrome.tabs.query({active: true, currentWindow: true})
     .then((tabs) => { // get current tab
       if (!tabs.length) return;
       return tabs[0]; // current tab should be first and only in list
@@ -28,7 +28,15 @@ async function updateCurrentUrl() {
       if (!tab) return;
       return tab.url
     })
-  console.log('Current page url set:', url)
-  chrome.storage.sync.set({url})
 }
 
+async function updateCurrentDomain() {
+  let domain = await getCurrentUrl() 
+    .then(url => { // extract domain (aka host) from url
+      if (!url) return;
+      let domain = (new URL(url));
+      return domain.hostname.replace('www.','');
+    })
+  console.log('Current domain set:', domain)
+  chrome.storage.sync.set({domain})
+}

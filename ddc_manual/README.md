@@ -30,3 +30,4 @@ ddc_manual/
 - [Chrome Extension Developers: Getting Started](https://developer.chrome.com/docs/extensions/mv3/getstarted/)
 - [ManifestV3 Field Summary](https://developer.chrome.com/docs/extensions/mv3/manifest/)
 - [Chrome API Reference](https://developer.chrome.com/docs/extensions/reference/)
+- [Get domain from url](https://w3collective.com/get-domain-name-url-javascript/)

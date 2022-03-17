@@ -28,6 +28,7 @@ function constructOptions(buttonColors) {
     for (let buttonColor of buttonColors) {
       // …create a button with that color…
       let button = document.createElement("button");
+      button.className = "tutorial"
       button.dataset.color = buttonColor;
       button.style.backgroundColor = buttonColor;
 
