@@ -8,12 +8,12 @@ chrome.runtime.onInstalled.addListener(() => { // todo rm
 });
 
 chrome.tabs.onActivated.addListener(() => {
-  console.log('Tab Activated!');
+  // console.log('Tab Activated!');
   updateCurrentUrl()
 })
 
 chrome.tabs.onUpdated.addListener(() => {
-  console.log('Tab Updated!');
+  // console.log('Tab Updated!');
   updateCurrentUrl()
 })
 
@@ -28,7 +28,7 @@ async function updateCurrentUrl() {
       if (!tab) return;
       return tab.url
     })
-  console.log('Current page url:', url)
+  console.log('Current page url set:', url)
   chrome.storage.sync.set({url})
 }
 
