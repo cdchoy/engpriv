@@ -1,6 +1,20 @@
 /* CSS Stylesheet for entire extension rather than by page or by element 
  * Reduces code reuse since we don't have a large extension to begin with. */
 
+button {
+    margin-top: 5px;
+}
+
+body {
+    min-width:150px;
+}
+
+.center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%
+}
 
 /* CSS Code for button from Google extension tutorial */
 button.tutorial {
@@ -8,6 +22,7 @@ button.tutorial {
     width: 30px;
     outline: none;
     margin: 10px;
+    margin-top: 2px;
     border: none;
     border-radius: 2px;
 }

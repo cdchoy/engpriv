@@ -31,3 +31,4 @@ ddc_manual/
 - [ManifestV3 Field Summary](https://developer.chrome.com/docs/extensions/mv3/manifest/)
 - [Chrome API Reference](https://developer.chrome.com/docs/extensions/reference/)
 - [Get domain from url](https://w3collective.com/get-domain-name-url-javascript/)
+- [App Icon Maker](https://appiconmaker.co/)
