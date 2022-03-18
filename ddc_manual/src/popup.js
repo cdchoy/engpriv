@@ -1,10 +1,29 @@
 // popup.js
 
 let urltext = document.getElementById("urltext");
+let ppButton = document.getElementById("privacypolicy");
+let rtkButton = document.getElementById("requestdata");
 
+// Update popup info anytime the active tab changes
 chrome.storage.sync.get("domain", ({domain}) => {
     urltext.innerHTML = "You are on: " + domain
-})
+
+    chrome.storage.sync.get("domainJson", ({domainJson}) => {
+        for (let item of domainJson) {
+            if (item.domain.toLowerCase() == domain.toLowerCase()) {
+                ppButton.innerHTML = "Privacy Policy"
+                rtkButton.innerHTML = "Request Data"
+                break;
+            } else {
+                ppButton.innerHTML = "Privacy Policy Not Found"
+                rtkButton.innerHTML = "Unable to Request Data"
+            }
+        }
+    })
+});
+
+
+
 
 // * * Chrome Button Sample Code. todo rm * * //
 // Initialize button with user's preferred color

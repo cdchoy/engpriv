@@ -1,10 +1,20 @@
 // background.js
 
+
 // * * Event Listeners * * //
 chrome.runtime.onInstalled.addListener(() => { 
   let color = '#3aa757'; // todo rm
   chrome.storage.sync.set({ color }); // todo rm
   console.log('Extension installed!');
+
+  fetch("../static/text/domain-map.json")
+    .then(response => {
+      return response.json();
+    })
+    .then(domainJson => {
+      console.log("JSON loaded: ", domainJson);
+      chrome.storage.sync.set({domainJson})
+    });
 });
 
 chrome.tabs.onActivated.addListener(() => {
@@ -37,6 +47,6 @@ async function updateCurrentDomain() {
       let domain = (new URL(url));
       return domain.hostname.replace('www.','');
     })
-  console.log('Current domain set:', domain)
+  // console.log('Current domain set:', domain)
   chrome.storage.sync.set({domain})
 }
