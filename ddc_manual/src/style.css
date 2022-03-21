@@ -15,19 +15,3 @@ body {
     margin-right: auto;
     width: 50%
 }
-
-/* CSS Code for button from Google extension tutorial */
-button.tutorial {
-    height: 30px;
-    width: 30px;
-    outline: none;
-    margin: 10px;
-    margin-top: 2px;
-    border: none;
-    border-radius: 2px;
-}
-  
-button.current {
-    box-shadow: 0 0 0 2px white,
-                0 0 0 4px black;
-}

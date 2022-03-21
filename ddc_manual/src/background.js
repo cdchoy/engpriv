@@ -2,8 +2,6 @@
 
 // * * Event Listeners * * //
 chrome.runtime.onInstalled.addListener(() => { 
-  let color = '#3aa757'; // todo rm
-  chrome.storage.sync.set({ color }); // todo rm
   console.log('Extension installed!');
 });
 
