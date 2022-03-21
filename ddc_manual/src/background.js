@@ -17,15 +17,9 @@ chrome.runtime.onInstalled.addListener(() => {
     });
 });
 
-chrome.tabs.onActivated.addListener(() => {
-  // console.log('Tab Activated!');
-  updateCurrentDomain()
-})
-
-chrome.tabs.onUpdated.addListener(() => {
-  // console.log('Tab Updated!');
-  updateCurrentDomain()
-})
+chrome.tabs.onActivated.addListener(updateCurrentDomain); // user changes tabs
+chrome.tabs.onUpdated.addListener(updateCurrentDomain); // user changes url on tab
+chrome.windows.onFocusChanged.addListener(updateCurrentDomain) // user changes windows
 
 // * * Functions * * //
 async function getCurrentUrl() {
@@ -46,6 +40,7 @@ async function updateCurrentDomain() {
       if (!url) return;
       let domain = (new URL(url));
       return domain.hostname.replace('www.','');
+      // TODO: strip all subdomains from domain string
     })
   // console.log('Current domain set:', domain)
   chrome.storage.sync.set({domain})
