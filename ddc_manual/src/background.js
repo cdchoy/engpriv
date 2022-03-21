@@ -40,7 +40,7 @@ async function updateCurrentDomain() {
       if (!url) return;
       let domain = (new URL(url));
       return domain.hostname.replace('www.','');
-      // TODO: strip all subdomains from domain string
+      // TODO: strip all subdomains from domain string 
     })
   // console.log('Current domain set:', domain)
   chrome.storage.sync.set({domain})

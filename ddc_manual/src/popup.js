@@ -2,7 +2,8 @@
 
 let urltext = document.getElementById("urltext");
 let ppButton = document.getElementById("privacypolicy");
-let rtkButton = document.getElementById("requestdata");
+let rtkButton = document.getElementById("onlineform");
+let emailButton = document.getElementById("emailrequest");
 
 // Update popup HTML anytime the current domain changes
 chrome.storage.sync.get("domain", ({domain}) => {
@@ -12,6 +13,8 @@ chrome.storage.sync.get("domain", ({domain}) => {
     ppButton.removeAttribute("href");
     rtkButton.innerHTML = "Unable to Request Data";
     rtkButton.removeAttribute("href");
+    emailButton.innerHTML = "Unable to Send Email";
+    emailButton.removeAttribute("href");
 
     chrome.storage.sync.get("domainJson", ({domainJson}) => {
         for (let item of domainJson) {
@@ -21,11 +24,12 @@ chrome.storage.sync.get("domain", ({domain}) => {
                     ppButton.setAttribute("href", item.privacy_policy);
                 }
                 if (item.rtk_form) {
-                    rtkButton.innerHTML = "Request Data";
-                    rtkButton.setAttribute("href", item.rtk_form)
+                    rtkButton.innerHTML = "Request Data via Online Form";
+                    rtkButton.setAttribute("href", item.rtk_form);
                 }
                 if (item.email) {
-                    // do nothing for now
+                    emailButton.innerHTML = "Request Data via Email";
+                    emailButton.setAttribute("href", generateEmailUrl(item.email));
                 }
             }
         }
@@ -43,6 +47,22 @@ rtkButton.addEventListener("click", () => {
     if (!newUrl) return; // do nothing
     chrome.tabs.create({url: newUrl});
 });
+
+emailButton.addEventListener("click", () => {
+    let newUrl = emailButton.getAttribute("href");
+    if (!newUrl) return; // do nothing
+    chrome.tabs.create({url: newUrl});
+})
+
+function generateEmailUrl(recipient) {
+    const urlprefix = "https://mail.google.com/mail/?view=cm&fs=1";
+    const emailTo = "&to=" + recipient;
+    const emailSubject = "&su=" + "Right to Access Request (Section 110 of the CCPA)";
+    const emailBody = "&body=" + "todo"; // read in boilerplate text file
+    const emailSignature = "todo"; // read in user's name from storage
+    
+    return urlprefix + emailTo + emailSubject + emailBody + emailSignature;
+}
 
 // * * Chrome Button Sample Code. todo rm * * //
 
