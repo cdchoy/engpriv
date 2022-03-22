@@ -32,6 +32,7 @@ ddc_manual/
 - [Chrome API Reference](https://developer.chrome.com/docs/extensions/reference/)
 - [Get domain from url](https://w3collective.com/get-domain-name-url-javascript/)
 - [App Icon Maker](https://appiconmaker.co/)
+- [Get domain without subdomain](https://stackoverflow.com/questions/9752963/get-domain-name-without-subdomains-using-javascript)
 
 ## TODO Items
 

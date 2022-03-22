@@ -13,6 +13,12 @@
     "background": {
         "service_worker": "/src/background.js"
     },
+    "content_scripts": [
+        {
+            "matches": ["https://*/*", "http://*/*"],
+            "js": ["src/external/psl.min.js", "src/content-script.js"]
+        }
+    ],
     "permissions": [
         "storage", 
         "activeTab",

@@ -5,9 +5,10 @@ chrome.runtime.onInstalled.addListener(() => {
   console.log('Extension installed!');
 });
 
-chrome.tabs.onActivated.addListener(updateCurrentDomain); // user changes tabs
-chrome.tabs.onUpdated.addListener(updateCurrentDomain); // user changes url on tab
-chrome.windows.onFocusChanged.addListener(updateCurrentDomain) // user changes windows
+// may be made obsolete by content script
+// chrome.tabs.onActivated.addListener(updateCurrentDomain); // user changes tabs
+// chrome.tabs.onUpdated.addListener(updateCurrentDomain); // user changes url on tab
+// chrome.windows.onFocusChanged.addListener(updateCurrentDomain) // user changes windows
 
 // * * Functions * * //
 async function getCurrentUrl() {
