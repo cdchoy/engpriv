@@ -32,3 +32,9 @@ ddc_manual/
 - [Chrome API Reference](https://developer.chrome.com/docs/extensions/reference/)
 - [Get domain from url](https://w3collective.com/get-domain-name-url-javascript/)
 - [App Icon Maker](https://appiconmaker.co/)
+
+## TODO Items
+
+- remove subdomains from collected domain
+- improve user settings interface for entering personal information
+- read in email body boilerplate from text file
