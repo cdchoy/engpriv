@@ -1,5 +1,41 @@
 // options.js
 
+const settings = {}; // in-page cache of settings form
+
+// Initialize form with user's stored settings
+chrome.storage.sync.get('settings', (data) => {
+    Object.assign(settings, data.settings);
+    settingsForm.fullname.placeholder = (settings.fullname ? settings.fullname : 'Your full name');
+    settingsForm.foobar.placeholder = (settings.foobar ? settings.foobar : 'Some other field');
+});
+
+// Persist settings changes when button clicked
+settingsForm.update.addEventListener('click', () => {
+    settings.fullname = settingsForm.fullname.value;
+    settings.foobar = settingsForm.foobar.value;
+    chrome.storage.sync.set({settings});
+});
+
+// Generate an email to a selected data broker
+emailButton.addEventListener("click", async () => {
+    let selectionEmail = document.getElementById("dataBrokers").value;
+    let newUrl = await generateEmailUrl(selectionEmail);
+    chrome.tabs.create({url: newUrl});
+});
+
+// copy-pasted from popup.js. Refactor this later
+async function generateEmailUrl(recipient) {
+    const urlprefix = "https://mail.google.com/mail/?view=cm&fs=1";
+    const emailTo = "&to=" + recipient;
+    const emailSubject = "&su=" + "Right to Access Request (Section 110 of the CCPA)";
+    const emailBody = "&body=" + "todo"; // todo: read in boilerplate text file
+    
+    return chrome.storage.sync.get('settings').then(data => {
+        const emailSignature = data.settings.fullname;
+        return urlprefix + emailTo + emailSubject + emailBody + emailSignature;
+    });
+}
+
 
 // let page = document.getElementById("buttonDiv");
 // let selectedClassName = "current";

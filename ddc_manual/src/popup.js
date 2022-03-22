@@ -34,7 +34,7 @@ chrome.storage.sync.get("domain", ({domain}) => {
             }
             if (item.email) {
                 emailButton.innerHTML = "Request Data via Email";
-                emailButton.setAttribute("href", generateEmailUrl(item.email));
+                emailButton.setAttribute("href", await generateEmailUrl(item.email));
             }
         }
     });
@@ -61,14 +61,16 @@ emailButton.addEventListener("click", () => {
 
 /* * HELPER FUNCTIONS * */
 
-function generateEmailUrl(recipient) {
+async function generateEmailUrl(recipient) {
     const urlprefix = "https://mail.google.com/mail/?view=cm&fs=1";
     const emailTo = "&to=" + recipient;
     const emailSubject = "&su=" + "Right to Access Request (Section 110 of the CCPA)";
-    const emailBody = "&body=" + "todo"; // read in boilerplate text file
-    const emailSignature = "todo"; // read in user's name from storage
-    chrome.storage.sync.get("subject-name", ) 
-    return urlprefix + emailTo + emailSubject + emailBody + emailSignature;
+    const emailBody = "&body=" + "todo"; // todo: read in boilerplate text file
+    
+    return chrome.storage.sync.get('settings').then(data => {
+        const emailSignature = data.settings.fullname;
+        return urlprefix + emailTo + emailSubject + emailBody + emailSignature;
+    });
 }
 
 function waitForDomainJson(timeout) {
