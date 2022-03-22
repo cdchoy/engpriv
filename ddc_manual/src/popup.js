@@ -18,7 +18,7 @@ chrome.storage.sync.get("domain", ({domain}) => {
     rtkButton.innerHTML = "CCPA Online Form Not Found";
     rtkButton.removeAttribute("href");
     emailButton.innerHTML = "CCPA Contact Email Unknown";
-    emailButton.removeAttribute("href");
+    emailButton.removeAttribute("emailto");
 
     chrome.storage.sync.get("domainJson", ({domainJson}) => {
         for (let item of domainJson) {
@@ -34,7 +34,7 @@ chrome.storage.sync.get("domain", ({domain}) => {
             }
             if (item.email) {
                 emailButton.innerHTML = "Request Data via Email";
-                emailButton.setAttribute("href", await generateEmailUrl(item.email));
+                emailButton.setAttribute("emailto", item.email);
             }
         }
     });
@@ -53,9 +53,10 @@ rtkButton.addEventListener("click", () => {
     chrome.tabs.create({url: newUrl});
 });
 
-emailButton.addEventListener("click", () => {
-    let newUrl = emailButton.getAttribute("href");
-    if (!newUrl) return; // do nothing
+emailButton.addEventListener("click", async () => {
+    let email = emailButton.getAttribute("emailto");
+    if (!email) return; // do nothing
+    let newUrl = await generateEmailUrl(email);
     chrome.tabs.create({url: newUrl});
 })
 
@@ -65,7 +66,7 @@ async function generateEmailUrl(recipient) {
     const urlprefix = "https://mail.google.com/mail/?view=cm&fs=1";
     const emailTo = "&to=" + recipient;
     const emailSubject = "&su=" + "Right to Access Request (Section 110 of the CCPA)";
-    const emailBody = "&body=" + "todo"; // todo: read in boilerplate text file
+    const emailBody = "&body=" + "todo%0A"; // todo: read in boilerplate text file
     
     return chrome.storage.sync.get('settings').then(data => {
         const emailSignature = data.settings.fullname;

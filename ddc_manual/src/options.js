@@ -28,7 +28,7 @@ async function generateEmailUrl(recipient) {
     const urlprefix = "https://mail.google.com/mail/?view=cm&fs=1";
     const emailTo = "&to=" + recipient;
     const emailSubject = "&su=" + "Right to Access Request (Section 110 of the CCPA)";
-    const emailBody = "&body=" + "todo"; // todo: read in boilerplate text file
+    const emailBody = "&body=" + "todo%0A"; // todo: read in boilerplate text file
     
     return chrome.storage.sync.get('settings').then(data => {
         const emailSignature = data.settings.fullname;
