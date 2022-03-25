@@ -1,0 +1,17 @@
+/* CSS Stylesheet for entire extension rather than by page or by element 
+ * Reduces code reuse since we don't have a large extension to begin with. */
+
+button {
+    margin-top: 5px;
+}
+
+body {
+    min-width:150px;
+}
+
+.center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%
+}

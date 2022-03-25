@@ -1,0 +1,14 @@
+[
+    {
+        "domain": "google.com",
+        "privacy_policy": "https://policies.google.com/privacy?hl=en",
+        "rtk_form": "https://takeout.google.com/settings/takeout",
+        "email": ""
+    },
+    {
+        "domain": "reddit.com",
+        "privacy_policy": "https://www.redditinc.com/policies/privacy-policy",
+        "rtk_form": "https://www.reddit.com/settings/data-request",
+        "email": "redditdatarequests@reddit.com"
+    }
+]

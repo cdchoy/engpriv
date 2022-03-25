@@ -5,7 +5,7 @@
 *.pem
 
 # Don't need this for unpacked extensions
-*/_metadata/
+_metadata/
 
 ## Default Python gitignore Stuff ##
 # Byte-compiled / optimized / DLL files
