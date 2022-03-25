@@ -20,6 +20,8 @@ chrome.storage.sync.get("domain", ({domain}) => {
     emailButton.innerHTML = "CCPA Contact Email Unknown";
     emailButton.removeAttribute("emailto");
 
+    if (!domain) return;
+
     chrome.storage.sync.get("domainJson", ({domainJson}) => {
         for (let item of domainJson) {
             if (item.domain.toLowerCase() != domain.toLowerCase()) continue;

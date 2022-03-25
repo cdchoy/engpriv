@@ -16,10 +16,10 @@
 //         console.log(parsed);
 //     })
 
-console.log("location:", location.href);
-let fullDomain = (new URL(location.href));
-let parsed = psl.parse(fullDomain.hostname);
-let domain = parsed.domain;
-console.log("parsed", domain);
+// console.log("location:", location.href);
+// let fullDomain = (new URL(location.href));
+// let parsed = psl.parse(fullDomain.hostname);
+// let domain = parsed.domain;
+// console.log("parsed", domain);
 
-chrome.storage.sync.set({domain})
+// chrome.storage.sync.set({domain})
