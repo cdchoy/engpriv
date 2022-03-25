@@ -11,8 +11,12 @@ chrome.storage.sync.get('settings', (data) => {
 
 // Persist settings changes when button clicked
 settingsForm.update.addEventListener('click', () => {
-    settings.fullname = settingsForm.fullname.value;
-    settings.foobar = settingsForm.foobar.value;
+    if (settingsForm.fullname.value) {
+        settings.fullname = settingsForm.fullname.value;
+    }
+    if (settingsForm.foobar.value) {
+        settings.foobar = settingsForm.foobar.value;
+    }
     chrome.storage.sync.set({settings});
 });
 
