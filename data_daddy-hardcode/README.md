@@ -1,4 +1,4 @@
-# ddc_manual
+# data_daddy-hardcode
 
 Version of Data_Daddy_CCPA that does NOT scrape the privacy policy for the online form link or contact email.
 Instead, it uses a maintained file that maps web domains to their:
