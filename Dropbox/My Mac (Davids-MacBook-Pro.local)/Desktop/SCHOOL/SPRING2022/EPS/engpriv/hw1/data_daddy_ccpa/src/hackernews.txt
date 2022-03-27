@@ -1,0 +1,58 @@
+Spotify and Google Announce User Choice Billing
+https://newsroom.spotify.com/2022-03-23/spotify-and-google-announce-user-choice-billing/
+Start Self Hosting
+https://rohanrd.xyz/posts/why-you-should-start-self-hosting/
+An update on recent service disruptions
+https://github.blog/2022-03-23-an-update-on-recent-service-disruptions/
+Teclis – Non-commercial web search
+http://teclis.com
+A Closer Look at the Lapsus$ Data Extortion Group
+https://krebsonsecurity.com/2022/03/a-closer-look-at-the-lapsus-data-extortion-group/
+Beauty and wonder of science boosts researchers’ well-being
+https://www.nature.com/articles/d41586-022-00762-8
+John Roach, Pioneer of the Personal Computer, Has Died
+https://www.nytimes.com/2022/03/23/technology/personaltech/john-roach-dead.html
+What’s a fire and why does it burn? (2016)
+https://qchu.wordpress.com/2016/05/26/whats-a-fire-and-why-does-it-whats-the-word-burn/
+Hex: A Strategy Guide
+http://www.mseymour.ca/hex_book/hexstrat.html
+These are real compounds
+https://www.science.org/content/blog-post/these-are-real-compounds
+Implementing a toy version of TLS 1.3
+https://jvns.ca/blog/2022/03/23/a-toy-version-of-tls/
+Launch HN: Charge Robotics (YC S21) - Robots that build solar farms
+item?id=30780455
+Scooping the Loop Snooper: proof of the undecidability of the halting problem [pdf]
+https://www.cs.rice.edu/~vardi/comp409/scooping.pdf
+Pocket-sized cloud with a Raspberry Pi
+https://blog.alexellis.io/your-pocket-sized-cloud/
+Awesome Self-Hosted
+https://github.com/awesome-selfhosted/
+Diagrams: Open-Source Alternative to Lucidchart
+https://www.diagrams.net/
+How to write a Vulkan driver in 2022
+https://www.collabora.com/news-and-blog/blog/2022/03/23/how-to-write-vulkan-driver-in-2022/
+Why income share agreements did not work out
+https://twitter.com/seanlinehan/status/1505923007096700939
+Cross-Compiling Rust for RISC-V
+https://danielmangum.com/posts/risc-v-bytes-rust-cross-compilation/
+Wasmer and Trademarks
+https://wasmer.io/posts/wasmer-and-trademarks
+Show HN: We made an open-source personalization engine
+https://github.com/metarank/metarank
+Ken and Roberta Williams Working on Colossal Cave Adventure Remake for VR and PC
+https://gameworldobserver.com/2022/03/22/ken-and-roberta-williams-working-on-colossal-cave-adventure-remake-for-vr-and-pc
+The pop and rock greats who love model railways
+https://www.theguardian.com/lifeandstyle/2022/mar/23/im-proud-to-be-called-a-nerd-the-pop-and-rock-greats-who-love-model-railways
+Another Vulnerability in the LPC55S69 ROM
+https://oxide.computer/blog/another-vulnerability-in-the-lpc55s69-rom
+Apple acquires UK open banking startup Credit Kudos
+https://ffnews.com/newsarticle/apple-acquires-uk-open-banking-startup-credit-kudos/
+SystemSix
+https://www.engineersneedart.com/systemsix/systemsix.html
+Why Pelikan
+https://twitter.github.io/pelikan/2019/why-pelikan.html
+The Keys to the Kingdom
+https://queue.acm.org/detail.cfm?id=3511664
+Linear Hammer: PCA is not a panacea (2013)
+https://danluu.com/linear-hammer/
