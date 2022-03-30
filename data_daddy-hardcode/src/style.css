@@ -2,8 +2,20 @@
  * Reduces code reuse since we don't have a large extension to begin with. */
 
 button {
+    color: black;
     margin-top: 5px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    cursor: pointer;
 }
+
+.buttonGreen {background-color: #4CAF50; color: white;} /* Green */
+.buttonBlue {background-color: #008CBA; color: white;} /* Blue */
+.buttonRed {background-color: #f44336; color: white;} /* Red */ 
+.buttonGray {background-color: #e7e7e7} /* Gray */ 
+.buttonBlack {background-color: #555555; color: white;} /* Black */
 
 body {
     min-width:150px;

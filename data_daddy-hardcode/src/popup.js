@@ -1,7 +1,5 @@
 // popup.js
 
-const domainJson = fetch("../static/text/domain-map.json").then(r => r.json());
-
 let urltext = document.getElementById("urltext");
 let ppButton = document.getElementById("privacypolicy");
 let rtkButton = document.getElementById("onlineform");
@@ -9,38 +7,44 @@ let emailButton = document.getElementById("emailrequest");
 
 // Update popup HTML anytime the current domain changes
 chrome.storage.sync.get("domain", ({domain}) => {
-    waitForDomainJson(30_000); // 30s timeout
-
     // Default values
     urltext.innerHTML = "You are on: " + domain;
     ppButton.innerHTML = "Privacy Policy Not Found";
     ppButton.removeAttribute("href");
+    ppButton.className = "buttonRed";
     rtkButton.innerHTML = "CCPA Online Form Not Found";
     rtkButton.removeAttribute("href");
+    rtkButton.className = "buttonRed";
     emailButton.innerHTML = "CCPA Contact Email Unknown";
     emailButton.removeAttribute("emailto");
+    emailButton.className = "buttonRed";
 
     if (!domain) return;
 
     chrome.storage.sync.get("domainJson", ({domainJson}) => {
+        if (!domainJson) return;
+
         for (let item of domainJson) {
             if (item.domain.toLowerCase() != domain.toLowerCase()) continue;
+
             // Else update all known values and links
             if (item.privacy_policy) {
                 ppButton.innerHTML = "Privacy Policy";
                 ppButton.setAttribute("href", item.privacy_policy);
+                ppButton.className = "buttonGreen";
             }
             if (item.rtk_form) {
                 rtkButton.innerHTML = "Request Data via Online Form";
                 rtkButton.setAttribute("href", item.rtk_form);
+                rtkButton.className = "buttonGreen";
             }
             if (item.email) {
                 emailButton.innerHTML = "Request Data via Email";
                 emailButton.setAttribute("emailto", item.email);
+                emailButton.className = "buttonGreen";
             }
         }
     });
-    
 });
 
 ppButton.addEventListener("click", () => {
@@ -74,21 +78,6 @@ async function generateEmailUrl(recipient) {
         const emailSignature = data.settings.fullname;
         return urlprefix + emailTo + emailSubject + emailBody + emailSignature;
     });
-}
-
-function waitForDomainJson(timeout) {
-    const start = Date.now();
-    return new Promise(promiseExec);
-
-    function promiseExec(resolve, reject) {
-        if (!domainJson) {
-            resolve(domainJson);
-        } else if (timeout && (Date.now() - start) >= timeout) {
-            reject(new Error("Timeout while fetching domain json"));
-        } else {
-            setTimeout(promiseExec.bind(this, resolve, reject), 30) // retry in 30ms
-        }
-    }
 }
 
 
