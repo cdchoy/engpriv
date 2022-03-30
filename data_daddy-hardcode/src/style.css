@@ -4,11 +4,18 @@
 button {
     color: black;
     margin-top: 5px;
+    border-radius: 4px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
     font-size: 14px;
     cursor: pointer;
+}
+
+button:hover{
+    color: #003FED;
+    border: #003FED solid 1px;
+    background:#fff;
 }
 
 .buttonGreen {background-color: #4CAF50; color: white;} /* Green */
