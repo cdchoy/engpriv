@@ -22,6 +22,7 @@ async function getCurrentDomain() {
     })
     .then(tab => { // extract url hostname from tab
       if (!tab) return;
+      if (!tab.url) return;
       let url = (new URL(tab.url));
       return url.hostname;
     })

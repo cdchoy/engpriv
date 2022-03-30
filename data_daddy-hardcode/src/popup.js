@@ -4,6 +4,7 @@ let urltext = document.getElementById("urltext");
 let ppButton = document.getElementById("privacypolicy");
 let rtkButton = document.getElementById("onlineform");
 let emailButton = document.getElementById("emailrequest");
+let optionsIcon = document.getElementById("options-icon");
 
 // Update popup HTML anytime the current domain changes
 chrome.storage.sync.get("domain", ({domain}) => {
@@ -64,6 +65,14 @@ emailButton.addEventListener("click", async () => {
     if (!email) return; // do nothing
     let newUrl = await generateEmailUrl(email);
     chrome.tabs.create({url: newUrl});
+})
+
+optionsIcon.addEventListener("click", async () => {
+    if (chrome.runtime.openOptionsPage) {
+        chrome.runtime.openOptionsPage();
+    } else {
+        window.open(chrome.runtime.getURL('options.html'));
+    }
 })
 
 /* * HELPER FUNCTIONS * */
