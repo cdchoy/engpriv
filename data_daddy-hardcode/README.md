@@ -38,5 +38,4 @@ ddc_manual/
 
 - improve user settings interface for entering/updating personal information on options page
 - read in email body boilerplate from text file
-- make buttons change color depending on if the resource (privacy policy, website form, email) can be found
 - improve how the buttons look; see if we can use the css for them from Dave's react buttons

@@ -5,13 +5,23 @@
         <link rel="stylesheet" href="style.css">
     </head>
     <body>
-        <img src="../static/images/datadaddyccpa.png" id="datadaddyccpa" 
-            width="100" height="100"/>
-        <!-- The current domain and action buttons are dynamically populated by popup.js -->
-        <h3 id="urltext">Loading...</h3>
-        <button id="privacypolicy">Loading...</button>
-        <button id="onlineform">Loading...</button>
-        <button id="emailrequest">Loading...</button>
+        <div id="titletext" dir="ltr">
+            <img class="header-logo" src="../static/images/datadaddyccpa.png" id="datadaddyccpa"/>
+            <span id="header-icons">
+                <a id="options-icon">
+                    <i tabindex="10" class="material-icons" id="svg_options" role="img" i18n-aria-label="options" aria-label="Options">settings</i>
+                    <span id="options-icon-tooltip" i18n="options" aria-hidden="true">Options</span>
+                </a>
+            </span>
+        </div>
+        
+        <div id="primary_section">
+            <!-- Dynamically populated by popup.js -->
+            <h3 id="urltext">Loading...</h3>
+            <button id="privacypolicy" class="buttonGray">Loading...</button>
+            <button id="onlineform" class="buttonGray">Loading...</button>
+            <button id="emailrequest" class="buttonGray">Loading...</button>
+        </div>
     </body>
     <script src="popup.js"></script>
 </html>
