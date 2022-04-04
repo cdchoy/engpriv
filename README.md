@@ -23,7 +23,8 @@ ENGPRIV
 |-- README.md
 ```
 
-Extension Versions
-`datadaddy_ccpa` is our first attempt at creating an extension and contains data broker email generation functionality. This is what we demoed at our midsemester presentation.
-`datadaddy_hardcode` is our version of the extension which hardcodes the mapping between domains a user is on to that domain's privacy policy and contact information. This is what we demoed at for our PRC demo presentation.
-`datadaddy_react` is our final version which leverages react and node to import modules.
+Extension Versions:
+
+- `datadaddy_ccpa` is our first attempt at creating an extension and contains data broker email generation functionality. This is what we demoed at our midsemester presentation.
+- `datadaddy_hardcode` is our version of the extension which hardcodes the mapping between domains a user is on to that domain's privacy policy and contact information. This is what we demoed at for our PRC demo presentation.
+- `datadaddy_react` is our final version which leverages react and node to import modules.
