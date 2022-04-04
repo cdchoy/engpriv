@@ -7,6 +7,11 @@
 # Don't need this for unpacked extensions
 _metadata/
 
+# Node and React Junk
+node_modules/
+build/
+npm-debug.log
+
 ## Default Python gitignore Stuff ##
 # Byte-compiled / optimized / DLL files
 __pycache__/
