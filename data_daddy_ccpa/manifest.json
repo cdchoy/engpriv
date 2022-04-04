@@ -4,7 +4,7 @@
         "default_popup": "popup.html",
         "default_title": "Click to show an alert"
     },
-    "version": "1.0",
+    "version": "0.1.0",
     "description": "Kicking Data Broker Butts",
     "declarative_net_request": {
         "rule_resources": [{

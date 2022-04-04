@@ -2,7 +2,7 @@
     "name": "Data Daddy",
     "author": "Privacy Jazz LLC.",
     "description": "Assists you in exercising your privacy rights under CCPA. Automates sending Right To Know requests for domains you vists.",
-    "version": "0.1.0",
+    "version": "0.2.0",
     "manifest_version": 3,
     "icons": {
         "16":  "/static/images/Icon-16.png",
