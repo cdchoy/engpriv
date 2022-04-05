@@ -3,9 +3,6 @@ import logo from '../../assets/img/logo.svg';
 import datadaddy from '../../assets/img/DataDaddyLogo.png';
 import Greetings from '../../containers/Greetings/Greetings';
 import './Popup.css';
-import { Cheerio } from 'cheerio';
-import URLParse from 'url-parse';
-import JSSoup from 'jssoup';
 import TextField from '@mui/material/TextField';
 import MuiButton from '@mui/material/Button';
 import SendIcon from '@mui/icons-material/Send';
@@ -16,57 +13,83 @@ import Select from '@mui/material/Select';
 import InputBase from '@mui/material/InputBase';
 import { styled } from '@mui/material/styles';
 import { getElementById } from 'domutils';
-import HTMLParser from 'node-html-parser';
 import Tautologistics from 'htmlparser';
 import { useState, useEffect } from 'react';
+
+const HTMLParser = require('node-html-parser')
+
+const JSSoup = require('jssoup').default;
 
 // Add this in your component file
 require('react-dom');
 window.React2 = require('react');
 console.log(window.React1 === window.React2);
 
-class Scraper extends React.Component {
-  constructor(props) {
-    super(props);
-    this.Fetch = this.Fetch.bind(this);
-  }
+let root;
+var emails = [];
+var hyperlinks = [];
+var emailRegex = /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi;
+var hyperlinksRegex = /^(ftp|http|https):\/\/[^ "]+$/gi;
+var deep = 0;
+const url = 'https://docs.github.com/en/github/site-policy/github-privacy-statement';
 
-  Fetch() {
-    const [data, setData] = useState(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+async function scrape() {
 
-    // When we throw an error in the .then() block,
-    // .catch() detects and uses our custom message
-    // whenever we hit a “404 Not Found.”
+  fetch(`${url}`)
+    .then(res => res.text())
+    .then(body => root = HTMLParser.parse(body))
+    .then(() => extractData(root, deep))
 
-    useEffect(() => {
-      fetch(`https://jsonplaceholder.typicode.com/posts?_limit=8`)
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error(
-              'This is an HTTP error: The status is ${response.status}'
-            );
+  function extractData(root, depth) {
+    if (depth === 1) { return }
+    if (depth > 3) { return }
+    const soup = new JSSoup(root);
+    var links = soup.findAll('a');
+
+    for (let i in links) {
+      if (links[i].attrs.href !== undefined) {
+        // Email Regex
+        if (links[i].attrs.href.match(emailRegex) !== null) {
+          emails.push(links[i].attrs.href.match(emailRegex));
+        }
+        // Hyperlinks Regex
+        if (links[i].attrs.href.match(hyperlinksRegex) !== null) {
+          hyperlinks.push(links[i].attrs.href.match(hyperlinksRegex));
+        }
+      }
+    }
+
+    for (let i in hyperlinks) {
+      var newRoot;
+      fetch(`${hyperlinks[i]}`)
+        .then(newRes => newRes.text())
+        .then(newBody => newRoot = HTMLParser.parse(newBody))
+        .then(() => extractData(newRoot, depth + 1))
+
+      var newSoup = new JSSoup(newRoot);
+      var newLinks = newSoup.findAll('a');
+
+      for (let i in newLinks) {
+        if (newLinks[i].attrs.href !== undefined) {
+          // Email Regex
+          if (newLinks[i].attrs.href.match(emailRegex) !== null) {
+            emails.push(links[i].attrs.href.match(emailRegex));
           }
-          return response.json();
-        })
-        .then((actualData) => console.log(actualData))
-        .catch((err) => {
-          console.log(err.message);
-        })
-        .finally(() => {
-          setLoading(false);
-        });
-    }, []);
-  }
-  render() {
-    return <button onClick={this.Fetch}>Click Me</button>;
+          // Hyperlinks Regex
+          if (newLinks[i].attrs.href.match(hyperlinksRegex) !== null) {
+            hyperlinks.push(links[i].attrs.href.match(hyperlinksRegex));
+          }
+        }
+      }
+    }
+    console.log(emails);
+    console.log(hyperlinks);
   }
 }
 
-const Popup = () => {
+scrape();
 
-  new Scraper();
+const Popup = () => {
 
   var databroker_map = {
     "towerData": "privacy@towerdata.com",
@@ -81,13 +104,13 @@ const Popup = () => {
     setBroker(event.target.value);
   };
 
-  function generateEmail() {
+  async function generateEmail() {
     var emailOne = "https://mail.google.com/mail/?view=cm&fs=1&to=";
     // This 1's for u Bolor
     // Data Broker Email Address
     // Right here vvv
     // var emailTwo = setBroker(target.value);
-    var emailTwo = "privacy@towerdata.com";
+    var emailTwo = emails;
     var emailThree = "&su=";
     var emailFour = "Right to Access Request (Section 110 of the CCPA)";
     var emailFive = "&body=";
@@ -100,6 +123,15 @@ const Popup = () => {
     chrome.tabs.create({ url: newURL });
   }
 
+  // ...
+  // I HAVE NO IDEA IF THIS CODE IS NECESSARY...
+  // SEEMS TO FUNCTION WHEN I COMMENT IT OUT?...
+  // CAN'T REMEMBER WHAT I WAS DOING WITH IT...
+  // LOOKS UI RELATED?...
+  //
+  // ¯\_(ツ)_/¯
+  //
+  // ...
   const BootstrapInput = styled(InputBase)(({ theme }) => ({
     'label + &': {
       marginTop: theme.spacing(3),
@@ -136,8 +168,9 @@ const Popup = () => {
   return (
     <div className="App">
       <header className="App-header">
-      <script defer src="./dist/bundle.js" />
+        <script defer src="./dist/bundle.js" />
 
+        {/* Logo, DataDaddyCCPA */}
         <p className="Logo-text">
           <text className="App-title-one">datadaddy.</text>
           <text className="App-title-two">CC</text>
@@ -145,14 +178,12 @@ const Popup = () => {
           <text className="App-title-two">A</text>
         </p>
 
-        {/* <img src={logo} className="App-logo" alt="logo" /> */}
-        {/* <img src={datadaddy} className="App-logo" alt="logo" /> */}
-
       </header>
 
       <p>
 
       </p>
+
       <a
         className="App-link"
         target="_blank"
@@ -181,12 +212,12 @@ const Popup = () => {
         </div>
 
         <footer className='App-footer'>
-          <MuiButton variant="contained" onClick={generateEmail} sx={{ width: 250, height: 50, alignContent: 'flex-start', mt: 1 }}>Scrape</MuiButton>
+          <MuiButton variant="contained" onClick={scrape} sx={{ width: 250, height: 50, alignContent: 'flex-start', mt: 1 }}>Scrape</MuiButton>
         </footer>
       </a>
-      <Scraper />
     </div>
   );
 };
 
 export default Popup;
+
