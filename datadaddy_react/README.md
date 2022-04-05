@@ -12,6 +12,7 @@ Boilerplate for this code was taken from Michael Xieyang Liu's [Github](https://
 - [X] Add RegEx to parse emails
 - [X] Settle on a crawling algorithm
 - [X] Set up (probably recursive) Fetch calls
+- [ ] Dynamically load url from current tab
 - [ ] Debug infinite fetch calls
 - [ ] Integrate crawler
 
