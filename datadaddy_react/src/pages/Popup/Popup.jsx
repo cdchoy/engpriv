@@ -187,31 +187,38 @@ const Popup = () => {
         
       </header>
 
-      <div>
-        <div>
-          <TextField id="userName" label="Your Name" variant="outlined" sx={{ width: 250, height: 50, mt: 1 }} />
-          <FormControl sx={{ minWidth: 250, height: 50, mt: 2 }}>
-            <InputLabel id="dataBrokers">Select Broker</InputLabel>
-            <Select
-              labelId="dataBrokers"
-              id="dataBrokers"
-              value={dataBroker}
-              label="Select Broker"
-              onChange={handleChange}
-            >
-              <MenuItem value={databroker_map["towerData"]}>Tower Data</MenuItem>
-              <MenuItem value={databroker_map["db2"]}>db2</MenuItem>
-              <MenuItem value={databroker_map["db3"]}>db3</MenuItem>
-              <MenuItem value={databroker_map["db4"]}>db4</MenuItem>
-            </Select>
-          </FormControl>
-        </div>
-        <MuiButton variant="outlined" onClick={generateEmail} endIcon={<SendIcon />} sx={{ width: 250, height: 56, mt: 2 }}>OPEN EMAIL IN NEW TAB</MuiButton>
-      </div>
+      <p>
 
-      <footer className='App-footer'>
-        <MuiButton variant="contained" onClick={scrape} sx={{ width: 250, height: 50, alignContent: 'flex-start', mt: 1 }}>Scrape</MuiButton>
-      </footer>
+      </p>
+
+        <div>
+          <div>
+            {/* <FormControl sx={{ minWidth: 250, height: 50, mt: 2 }}>
+              <InputLabel id="dataBrokers">Select Broker</InputLabel>
+              <Select
+                labelId="dataBrokers"
+                id="dataBrokers"
+                value={dataBroker}
+                label="Select Broker"
+                onChange={handleChange}
+              >
+                <MenuItem value={databroker_map["towerData"]}>Tower Data</MenuItem>
+                <MenuItem value={databroker_map["db2"]}>db2</MenuItem>
+                <MenuItem value={databroker_map["db3"]}>db3</MenuItem>
+                <MenuItem value={databroker_map["db4"]}>db4</MenuItem>
+              </Select>
+            </FormControl> */}
+          </div>
+        </div>
+        <TextField id="userName" label="Your Name" variant="outlined" sx={{ width: 250, height: 56, mt: 1 }} />
+        <MuiButton id="privacypolicy" variant="outlined" sx={{ width: 250, height: 56, mt: 2 }}>Loading...</MuiButton>
+        <MuiButton id="onlineform" variant="outlined" sx={{ width: 250, height: 56, mt: 2 }}>Loading...</MuiButton>
+        <MuiButton id="emailrequest" variant="outlined" sx={{ width: 250, height: 56, mt: 2 }}>Loading...</MuiButton>
+        <MuiButton variant="outlined" onClick={generateEmail} endIcon={<SendIcon />} sx={{ width: 250, height: 56, mt: 2 }}>OPEN EMAIL IN NEW TAB</MuiButton>
+
+        <footer className='App-footer'>
+          <MuiButton variant="contained" onClick={scrape} sx={{ width: 250, height: 50, alignContent: 'flex-start', mt: 1 }}>Scrape</MuiButton>
+        </footer>
     </div>
   );
 };
