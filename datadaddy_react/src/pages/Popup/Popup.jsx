@@ -12,6 +12,7 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import InputBase from '@mui/material/InputBase';
 import { styled } from '@mui/material/styles';
+import SettingsIcon from '@mui/icons-material/Settings';
 import { getElementById } from 'domutils';
 import Tautologistics from 'htmlparser';
 import { useState, useEffect } from 'react';
@@ -31,7 +32,7 @@ var hyperlinks = [];
 var emailRegex = /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi;
 var hyperlinksRegex = /^(ftp|http|https):\/\/[^ "]+$/gi;
 var deep = 0;
-const url = 'https://docs.github.com/en/github/site-policy/github-privacy-statement';
+const url = 'http://www.ycombinator.com/legal/';
 
 async function scrape() {
 
@@ -177,6 +178,7 @@ const Popup = () => {
           <text className="App-title-three">P</text>
           <text className="App-title-two">A</text>
         </p>
+
 
       </header>
 

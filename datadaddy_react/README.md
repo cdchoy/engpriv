@@ -8,7 +8,7 @@ Boilerplate for this code was taken from Michael Xieyang Liu's [Github](https://
 
 ## TODO
 
-### Scraper
+### Crawler
 - [X] Add RegEx to parse emails
 - [X] Settle on a crawling algorithm
 - [X] Set up (probably recursive) Fetch calls
