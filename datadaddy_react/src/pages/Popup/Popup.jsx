@@ -178,11 +178,11 @@ const Popup = () => {
 
         {/* Logo, DataDaddyCCPA */}
         <p className="Logo-text">
-          <text className="App-title-one">datadaddy.</text>
-          <text className="App-title-two">CC</text>
-          <text className="App-title-three">P</text>
-          <text className="App-title-two">A</text>
-          <SettingsIcon variant="outlined" style={{ color: 'red' }}/>
+          <text className="App-text-one Gray">datadaddy.</text>
+          <text className="App-text-two Blue">CC</text>
+          <text className="App-text-two Red">P</text>
+          <text className="App-text-two Blue">A</text>
+          <SettingsIcon variant="outlined" className="Gray"/>
         </p>
         
       </header>
