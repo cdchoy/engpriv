@@ -62,7 +62,7 @@
   background-color:white;
 }
 
-.App-title-one {
+.App-text-one {
   height: 100%;
   font-family: 'American Typewriter', 'Segoe UI', 'Roboto', 'Oxygen',
   'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
@@ -70,28 +70,24 @@
   align-items: left;
   justify-content: vertical;
   font-size: calc(10px + 5vmin);
+}
+.App-text-two {
+  height: 100%;
+  font-family: 'Athelas', 'Segoe UI', 'Roboto', 'Oxygen',
+  'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  sans-serif;
+  align-items: left;
+  justify-content: left;
+  font-size: calc(10px + 10vmin);
+}
+
+.Gray {
   color:lightslategray
 }
-
-.App-title-two {
-  height: 100%;
-  font-family: 'Athelas', 'Segoe UI', 'Roboto', 'Oxygen',
-  'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-  sans-serif;
-  align-items: left;
-  justify-content: left;
-  font-size: calc(10px + 10vmin);
+.Blue {
   color:dodgerblue;
 }
-
-.App-title-three {
-  height: 100%;
-  font-family: 'Athelas', 'Segoe UI', 'Roboto', 'Oxygen',
-  'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-  sans-serif;
-  align-items: left;
-  justify-content: left;
-  font-size: calc(10px + 10vmin);
+.Red {
   color:crimson;
 }
 
