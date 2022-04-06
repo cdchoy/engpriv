@@ -15,6 +15,7 @@ import { styled } from '@mui/material/styles';
 import { getElementById } from 'domutils';
 import Tautologistics from 'htmlparser';
 import { useState, useEffect } from 'react';
+import SettingsIcon from '@mui/icons-material/Settings';
 
 const HTMLParser = require('node-html-parser')
 
@@ -176,8 +177,9 @@ const Popup = () => {
           <text className="App-title-two">CC</text>
           <text className="App-title-three">P</text>
           <text className="App-title-two">A</text>
+          <SettingsIcon variant="outlined" style={{ color: 'red' }}/>
         </p>
-
+        
       </header>
 
       <p>
