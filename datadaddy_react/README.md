@@ -2,6 +2,35 @@
 
 Boilerplate for this code was taken from Michael Xieyang Liu's [Github](https://github.com/lxieyang/chrome-extension-boilerplate-react).
 
+# <img src="../datadaddy_react/src/assets/img/DataDaddyLogo.png" width="20"/> Data Daddy v3.1
+
+# <img src="../datadaddy_react/src/assets/img/datadaddy.png" width="200"/>
+
+## TODO
+
+### Scraper
+- [X] Add RegEx to parse emails
+- [X] Settle on a crawling algorithm
+- [X] Set up (probably recursive) Fetch calls
+- [ ] Dynamically load url from current tab
+- [ ] Debug infinite fetch calls
+- [ ] Integrate crawler
+
+### Form Filling Automation
+- [X] Touch base with OneTrust
+- [ ] Create Data Flow Diagram for OneTrust DSAR Module
+- [ ] Research MUI AutoComplete
+
+### Voice Assistant Integration
+- [ ] Research Siri API
+- [ ] Research Alexa API
+- [ ] Research Google Assistant API
+
+### NLP
+- [X] Research NLP libraries in JavaScript/TypeScript
+- [ ] Settle on library choice
+- [ ] Develop and train model on Privacy Policies or Privacy Pages
+
 ## Setup and Usage
 
 1. Navigate to this directory within the repo `cd datadaddy_react`
