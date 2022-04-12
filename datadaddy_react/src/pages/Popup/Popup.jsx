@@ -31,7 +31,7 @@ var hyperlinks = [];
 var emailRegex = /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi;
 var hyperlinksRegex = /^(ftp|http|https):\/\/[^ "]+$/gi;
 var deep = 0;
-const url = 'https://github.com/';
+const url = 'https://www.cmu.edu/legal/';
 
 async function scrape() {
   fetch(`${url}`)
