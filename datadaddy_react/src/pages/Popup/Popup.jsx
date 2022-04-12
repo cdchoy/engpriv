@@ -25,13 +25,13 @@ require('react-dom');
 window.React2 = require('react');
 console.log(window.React1 === window.React2);
 
-let root;
+var root;
 var emails = [];
 var hyperlinks = [];
 var emailRegex = /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi;
 var hyperlinksRegex = /^(ftp|http|https):\/\/[^ "]+$/gi;
 var deep = 0;
-const url = 'https://docs.github.com/en/github/site-policy/github-privacy-statement';
+const url = 'https://github.com/';
 
 async function scrape() {
 
@@ -40,51 +40,58 @@ async function scrape() {
     .then(body => root = HTMLParser.parse(body))
     .then(() => extractData(root, deep))
 
-  function extractData(root, depth) {
-    if (depth === 1) { return }
-    if (depth > 3) { return }
-    const soup = new JSSoup(root);
-    var links = soup.findAll('a');
 
-    for (let i in links) {
-      if (links[i].attrs.href !== undefined) {
-        // Email Regex
-        if (links[i].attrs.href.match(emailRegex) !== null) {
-          emails.push(links[i].attrs.href.match(emailRegex));
-        }
-        // Hyperlinks Regex
-        if (links[i].attrs.href.match(hyperlinksRegex) !== null) {
-          hyperlinks.push(links[i].attrs.href.match(hyperlinksRegex));
-        }
+}
+
+function extractData(tempRoot, depth) {
+  console.log(depth);
+  if (depth === 2 || hyperlinks.length > 300) { return }
+  const soup = new JSSoup(tempRoot);
+  var links = soup.findAll('a');
+  // console.log(links);
+
+  for (let i in links) {
+    if (links[i].attrs.href !== undefined) {
+      // Email Regex
+      if (links[i].attrs.href.match(emailRegex) !== null) {
+        let mailAddr = links[i].attrs.href.match(emailRegex);
+        emails.push(mailAddr);
+        console.log("mail address: " + mailAddr);
+      }
+      // Hyperlinks Regex
+      if (links[i].attrs.href.match(hyperlinksRegex) !== null) {
+        let linkAddr = links[i].attrs.href.match(hyperlinksRegex);
+        hyperlinks.push(linkAddr);
+        console.log(linkAddr);
       }
     }
-
-    for (let i in hyperlinks) {
-      var newRoot;
-      fetch(`${hyperlinks[i]}`)
-        .then(newRes => newRes.text())
-        .then(newBody => newRoot = HTMLParser.parse(newBody))
-        .then(() => extractData(newRoot, depth + 1))
-
-      var newSoup = new JSSoup(newRoot);
-      var newLinks = newSoup.findAll('a');
-
-      for (let i in newLinks) {
-        if (newLinks[i].attrs.href !== undefined) {
-          // Email Regex
-          if (newLinks[i].attrs.href.match(emailRegex) !== null) {
-            emails.push(links[i].attrs.href.match(emailRegex));
-          }
-          // Hyperlinks Regex
-          if (newLinks[i].attrs.href.match(hyperlinksRegex) !== null) {
-            hyperlinks.push(links[i].attrs.href.match(hyperlinksRegex));
-          }
-        }
-      }
-    }
-    console.log(emails);
-    console.log(hyperlinks);
   }
+
+  for (let i in hyperlinks) {
+    var newRoot;
+    fetch(`${hyperlinks[i]}`)
+      .then(newRes => newRes.text())
+      .then(newBody => newRoot = HTMLParser.parse(newBody))
+      .then(() => extractData(newRoot, depth + 1))
+
+    // var newSoup = new JSSoup(newRoot);
+    // var newLinks = newSoup.findAll('a');
+
+    // for (let i in newLinks) {
+    //   if (newLinks[i].attrs.href !== undefined) {
+    //     // Email Regex
+    //     if (newLinks[i].attrs.href.match(emailRegex) !== null) {
+    //       emails.push(links[i].attrs.href.match(emailRegex));
+    //     }
+    //     // Hyperlinks Regex
+    //     if (newLinks[i].attrs.href.match(hyperlinksRegex) !== null) {
+    //       hyperlinks.push(links[i].attrs.href.match(hyperlinksRegex));
+    //     }
+    //   }
+    // }
+  }
+  console.log(emails);
+  console.log(hyperlinks);
 }
 
 scrape();
