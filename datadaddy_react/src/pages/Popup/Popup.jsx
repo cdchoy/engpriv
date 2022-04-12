@@ -26,7 +26,7 @@ window.React2 = require('react');
 console.log(window.React1 === window.React2);
 
 var root;
-var emails = [];
+var emails = new Set();
 var hyperlinks = new Set();
 var emailRegex = /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi;
 var hyperlinksRegex = /^(ftp|http|https):\/\/[^ "]+$/gi;
@@ -70,8 +70,10 @@ async function extractDataBFS() {
           // Email Regex
           let mailAddr = linksBfs[i].attrs.href.match(emailRegex);
           if (mailAddr != null) {
-            emails.push(mailAddr);
-            console.log("mail address: " + mailAddr);
+            if (emails.has(mailAddr) === false) {
+              emails.add(mailAddr);
+              console.log("mail address: " + mailAddr);
+            }
           }
 
           // Hyperlinks Regex
@@ -89,7 +91,7 @@ async function extractDataBFS() {
       }
     }
     depth++;
-    if (depth > 2 || hyperlinks.length > 300) {
+    if (depth > 2 || emails.length > 30) {
       console.log(hyperlinks);
       return;
     }
