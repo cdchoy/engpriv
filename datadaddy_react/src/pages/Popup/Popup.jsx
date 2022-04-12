@@ -34,18 +34,15 @@ var deep = 0;
 const url = 'https://github.com/';
 
 async function scrape() {
-
   fetch(`${url}`)
     .then(res => res.text())
     .then(body => root = HTMLParser.parse(body))
     .then(() => extractData(root, deep))
-
-
 }
 
 function extractData(tempRoot, depth) {
   console.log(depth);
-  if (depth === 2 || hyperlinks.length > 300) { return }
+  if (depth === 3 || hyperlinks.length > 300) { return }
   const soup = new JSSoup(tempRoot);
   var links = soup.findAll('a');
   // console.log(links);
@@ -61,8 +58,10 @@ function extractData(tempRoot, depth) {
       // Hyperlinks Regex
       if (links[i].attrs.href.match(hyperlinksRegex) !== null) {
         let linkAddr = links[i].attrs.href.match(hyperlinksRegex);
-        hyperlinks.push(linkAddr);
-        console.log(linkAddr);
+        if (hyperlinks.indexOf(linkAddr) === -1) {
+          hyperlinks.push(linkAddr);
+          console.log(linkAddr);
+        }
       }
     }
   }
@@ -73,22 +72,6 @@ function extractData(tempRoot, depth) {
       .then(newRes => newRes.text())
       .then(newBody => newRoot = HTMLParser.parse(newBody))
       .then(() => extractData(newRoot, depth + 1))
-
-    // var newSoup = new JSSoup(newRoot);
-    // var newLinks = newSoup.findAll('a');
-
-    // for (let i in newLinks) {
-    //   if (newLinks[i].attrs.href !== undefined) {
-    //     // Email Regex
-    //     if (newLinks[i].attrs.href.match(emailRegex) !== null) {
-    //       emails.push(links[i].attrs.href.match(emailRegex));
-    //     }
-    //     // Hyperlinks Regex
-    //     if (newLinks[i].attrs.href.match(hyperlinksRegex) !== null) {
-    //       hyperlinks.push(links[i].attrs.href.match(hyperlinksRegex));
-    //     }
-    //   }
-    // }
   }
   console.log(emails);
   console.log(hyperlinks);
