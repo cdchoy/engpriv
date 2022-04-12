@@ -27,7 +27,7 @@ const Options: React.FC<Props> = ({ title }: Props) => {
             <option value="db3@gmail.com">db3</option>
             <option value="db4@gmail.com">db4</option>
         </select>
-        <button id="emailButton" onClick={generateEmail()}>Generate Email</button>
+        <button id="emailButton">Generate Email</button>
       </div>
     </div>
   );
