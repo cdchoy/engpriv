@@ -27,22 +27,79 @@ console.log(window.React1 === window.React2);
 
 var root;
 var emails = [];
-var hyperlinks = [];
+var hyperlinks = new Set();
 var emailRegex = /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi;
 var hyperlinksRegex = /^(ftp|http|https):\/\/[^ "]+$/gi;
 var deep = 0;
 const url = 'https://github.com/';
+var queue = [];
 
 async function scrape() {
-  fetch(`${url}`)
-    .then(res => res.text())
-    .then(body => root = HTMLParser.parse(body))
-    .then(() => extractData(root, deep))
+  // fetch(`${url}`)
+  //   .then(res => res.text())
+  //   .then(body => root = HTMLParser.parse(body))
+  //   .then(() => extractDataBFS())
+    // .then(() => extractData(root, deep))
+    extractDataBFS();
+}
+
+async function extractDataBFS() {
+  var depth = 0;
+  queue.push(url);
+  // console.log(url);
+  console.log(queue[0]);
+  // console.log("Curren queue size: " + queue.length);
+  while (queue.length > 0) {
+    var levelSize = queue.length;
+    console.log("current level size: " + levelSize);
+    for (var lvl = 0; lvl < levelSize; lvl++) {
+      var currLink = queue[0];
+      // console.log("current link " + currLink);
+      
+      queue.shift();
+      var rootBfs = await fetch(`${currLink}`)
+        .then(resBfs => resBfs.text())
+        .then(bodyBfs => HTMLParser.parse(bodyBfs));
+      // console.log(rootBfs);
+      const soupBfs = new JSSoup(rootBfs);
+      // console.log(soupBfs);
+      var linksBfs = soupBfs.findAll('a');
+      // console.log(linksBfs);
+      for (let i in linksBfs) {
+        if (linksBfs[i].attrs.href !== undefined) {
+          // Email Regex
+          let mailAddr = linksBfs[i].attrs.href.match(emailRegex);
+          if (mailAddr != null) {
+            emails.push(mailAddr);
+            console.log("mail address: " + mailAddr);
+          }
+
+          // Hyperlinks Regex
+          let linkAddr = linksBfs[i].attrs.href.match(hyperlinksRegex);
+          if (linkAddr != null) {
+            if (hyperlinks.has(linkAddr) === false) {
+              queue.push(linkAddr);
+              hyperlinks.add(linkAddr);
+              // console.log(linkAddr);
+            }
+          }
+        }
+
+  
+      }
+    }
+    depth++;
+    if (depth > 2 || hyperlinks.length > 300) {
+      console.log(hyperlinks);
+      return;
+    }
+
+  }
 }
 
 function extractData(tempRoot, depth) {
   console.log(depth);
-  if (depth === 3 || hyperlinks.length > 300) { return }
+  if (depth === 3 || hyperlinks.size > 5) { return }
   const soup = new JSSoup(tempRoot);
   var links = soup.findAll('a');
   // console.log(links);
@@ -50,16 +107,16 @@ function extractData(tempRoot, depth) {
   for (let i in links) {
     if (links[i].attrs.href !== undefined) {
       // Email Regex
-      if (links[i].attrs.href.match(emailRegex) !== null) {
+      if (links[i].attrs.href.match(emailRegex) != null) {
         let mailAddr = links[i].attrs.href.match(emailRegex);
         emails.push(mailAddr);
         console.log("mail address: " + mailAddr);
       }
       // Hyperlinks Regex
-      if (links[i].attrs.href.match(hyperlinksRegex) !== null) {
+      if (links[i].attrs.href.match(hyperlinksRegex) != null) {
         let linkAddr = links[i].attrs.href.match(hyperlinksRegex);
-        if (hyperlinks.indexOf(linkAddr) === -1) {
-          hyperlinks.push(linkAddr);
+        if (hyperlinks.has(linkAddr) === false) {
+          hyperlinks.add(linkAddr);
           console.log(linkAddr);
         }
       }
