@@ -35,36 +35,25 @@ const url = 'https://www.reddit.com/';
 var queue = [];
 
 async function scrape() {
-  // fetch(`${url}`)
-  //   .then(res => res.text())
-  //   .then(body => root = HTMLParser.parse(body))
-  //   .then(() => extractDataBFS())
-    // .then(() => extractData(root, deep))
     extractDataBFS();
 }
 
 async function extractDataBFS() {
   var depth = 0;
   queue.push(url);
-  // console.log(url);
   console.log(queue[0]);
-  // console.log("Curren queue size: " + queue.length);
   while (queue.length > 0) {
+
     var levelSize = queue.length;
-    // console.log("current level size: " + levelSize);
+
     for (var lvl = 0; lvl < levelSize; lvl++) {
-      var currLink = queue[0];
-      // console.log("current link " + currLink);
-      
+      var currLink = queue[0];      
       queue.shift();
       var rootBfs = await fetch(`${currLink}`)
         .then(resBfs => resBfs.text())
         .then(bodyBfs => HTMLParser.parse(bodyBfs));
-      // console.log(rootBfs);
       const soupBfs = new JSSoup(rootBfs);
-      // console.log(soupBfs);
       var linksBfs = soupBfs.findAll('a');
-      // console.log(linksBfs);
       for (let i in linksBfs) {
         if (linksBfs[i].attrs.href !== undefined) {
           // Email Regex
@@ -72,7 +61,6 @@ async function extractDataBFS() {
           if (mailAddr != null) {
             if (emails.has(mailAddr) === false) {
               emails.add(mailAddr);
-              // console.log("mail address: " + mailAddr);
             }
           }
 
@@ -82,7 +70,6 @@ async function extractDataBFS() {
             if (hyperlinks.has(linkAddr) === false) {
               queue.push(linkAddr);
               hyperlinks.add(linkAddr);
-              // console.log(linkAddr);
             }
           }
         }
@@ -95,43 +82,6 @@ async function extractDataBFS() {
       return;
     }
   }
-}
-
-function extractData(tempRoot, depth) {
-  console.log(depth);
-  if (depth === 3 || hyperlinks.size > 5) { return }
-  const soup = new JSSoup(tempRoot);
-  var links = soup.findAll('a');
-  // console.log(links);
-
-  for (let i in links) {
-    if (links[i].attrs.href !== undefined) {
-      // Email Regex
-      if (links[i].attrs.href.match(emailRegex) != null) {
-        let mailAddr = links[i].attrs.href.match(emailRegex);
-        emails.push(mailAddr);
-        // console.log("mail address: " + mailAddr);
-      }
-      // Hyperlinks Regex
-      if (links[i].attrs.href.match(hyperlinksRegex) != null) {
-        let linkAddr = links[i].attrs.href.match(hyperlinksRegex);
-        if (hyperlinks.has(linkAddr) === false) {
-          hyperlinks.add(linkAddr);
-          // console.log(linkAddr);
-        }
-      }
-    }
-  }
-
-  for (let i in hyperlinks) {
-    var newRoot;
-    fetch(`${hyperlinks[i]}`)
-      .then(newRes => newRes.text())
-      .then(newBody => newRoot = HTMLParser.parse(newBody))
-      .then(() => extractData(newRoot, depth + 1))
-  }
-  console.log(emails);
-  console.log(hyperlinks);
 }
 
 scrape();
