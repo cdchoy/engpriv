@@ -26,55 +26,62 @@ window.React2 = require('react');
 console.log(window.React1 === window.React2);
 
 var root;
-var emails = [];
-var hyperlinks = [];
+var emails = new Set();
+var hyperlinks = new Set();
 var emailRegex = /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi;
 var hyperlinksRegex = /^(ftp|http|https):\/\/[^ "]+$/gi;
 var deep = 0;
-const url = 'https://www.cmu.edu/legal/';
+const url = 'https://www.reddit.com/';
+var queue = [];
 
 async function scrape() {
-  fetch(`${url}`)
-    .then(res => res.text())
-    .then(body => root = HTMLParser.parse(body))
-    .then(() => extractData(root, deep))
+    extractDataBFS();
 }
 
-function extractData(tempRoot, depth) {
-  console.log(depth);
-  if (depth === 3 || hyperlinks.length > 300) { return }
-  const soup = new JSSoup(tempRoot);
-  var links = soup.findAll('a');
-  // console.log(links);
+async function extractDataBFS() {
+  var depth = 0;
+  queue.push(url);
+  console.log(queue[0]);
+  while (queue.length > 0) {
 
-  for (let i in links) {
-    if (links[i].attrs.href !== undefined) {
-      // Email Regex
-      if (links[i].attrs.href.match(emailRegex) !== null) {
-        let mailAddr = links[i].attrs.href.match(emailRegex);
-        emails.push(mailAddr);
-        console.log("mail address: " + mailAddr);
-      }
-      // Hyperlinks Regex
-      if (links[i].attrs.href.match(hyperlinksRegex) !== null) {
-        let linkAddr = links[i].attrs.href.match(hyperlinksRegex);
-        if (hyperlinks.indexOf(linkAddr) === -1) {
-          hyperlinks.push(linkAddr);
-          console.log(linkAddr);
+    var levelSize = queue.length;
+
+    for (var lvl = 0; lvl < levelSize; lvl++) {
+      var currLink = queue[0];      
+      queue.shift();
+      var rootBfs = await fetch(`${currLink}`)
+        .then(resBfs => resBfs.text())
+        .then(bodyBfs => HTMLParser.parse(bodyBfs));
+      const soupBfs = new JSSoup(rootBfs);
+      var linksBfs = soupBfs.findAll('a');
+      for (let i in linksBfs) {
+        if (linksBfs[i].attrs.href !== undefined) {
+          // Email Regex
+          let mailAddr = linksBfs[i].attrs.href.match(emailRegex);
+          if (mailAddr != null) {
+            if (emails.has(mailAddr) === false) {
+              emails.add(mailAddr);
+            }
+          }
+
+          // Hyperlinks Regex
+          let linkAddr = linksBfs[i].attrs.href.match(hyperlinksRegex);
+          if (linkAddr != null) {
+            if (hyperlinks.has(linkAddr) === false) {
+              queue.push(linkAddr);
+              hyperlinks.add(linkAddr);
+            }
+          }
         }
       }
     }
+    depth++;
+    if (depth > 2 || emails.size > 10 || hyperlinks.size > 100) {
+      console.log(hyperlinks);
+      console.log(emails);
+      return;
+    }
   }
-
-  for (let i in hyperlinks) {
-    var newRoot;
-    fetch(`${hyperlinks[i]}`)
-      .then(newRes => newRes.text())
-      .then(newBody => newRoot = HTMLParser.parse(newBody))
-      .then(() => extractData(newRoot, depth + 1))
-  }
-  console.log(emails);
-  console.log(hyperlinks);
 }
 
 scrape();
@@ -100,7 +107,7 @@ const Popup = () => {
     // Data Broker Email Address
     // Right here vvv
     // var emailTwo = setBroker(target.value);
-    var emailTwo = emails;
+    var emailTwo = Array.from(emails);
     var emailThree = "&su=";
     var emailFour = "Right to Access Request (Section 110 of the CCPA)";
     var emailFive = "&body=";
