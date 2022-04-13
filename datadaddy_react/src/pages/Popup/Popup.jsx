@@ -10,9 +10,13 @@ import ScrapeButton from './Scraper';
 import { domainData } from '../../assets/data/domainMap';
 
 const Popup = () => {
-  let emailRecipients = ["privacy@towerdata.com"];
-  let emailHref = generateEmail(emailRecipients);
+  let ppHref;
+  let onlineFormHref;
+  let emailHref;
 
+  ppHref = "https://www.redditinc.com/policies/privacy-policy";
+  emailHref = generateEmail(["privacy@towerdata.com"]);
+  
   return (
     <div className="App">
       <header className="App-header">
@@ -20,12 +24,11 @@ const Popup = () => {
         <DataDaddyLogo/>
       </header>
 
-      <body>
-        <TextField id="userName" label="Your Name" variant="outlined" sx={{ width: 250, height: 56, mt: 1 }} />
-        <PopupButton text="Privacy Policy" disabled={false} href={"https://www.redditinc.com/policies/privacy-policy"}/>
-        <PopupButton text="Online Form" disabled={true}/>
-        <PopupButton text="Email Request" disabled={false} icon={<SendIcon/>} href={emailHref}/> 
-      </body>
+      <p>You are on {window.location.hostname}</p>
+      <TextField id="userName" label="Your Name" variant="outlined" sx={{ width: 250, height: 56, mt: 1 }} />
+      <PopupButton text="Privacy Policy" href={ppHref}/>
+      <PopupButton text="Online Form" href={onlineFormHref}/>
+      <PopupButton text="Email Request" icon={<SendIcon/>} href={emailHref}/> 
 
       <footer className='App-footer'>
         <ScrapeButton/>
@@ -50,6 +53,16 @@ function getDomainInfo() {
   for (let item in domainData) {
     console.log(item);
   }
+}
+
+const getDomain = () => {
+	chrome.storage.sync.get('domain', (results) => {
+		if (results.domain) {
+			this.setState({
+				domain: results.domain,
+			})
+		}
+	})
 }
 
 export default Popup;
