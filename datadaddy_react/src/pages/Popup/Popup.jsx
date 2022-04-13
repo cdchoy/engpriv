@@ -31,7 +31,7 @@ var hyperlinks = new Set();
 var emailRegex = /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi;
 var hyperlinksRegex = /^(ftp|http|https):\/\/[^ "]+$/gi;
 var deep = 0;
-const url = 'https://github.com/';
+const url = 'https://www.reddit.com/';
 var queue = [];
 
 async function scrape() {
@@ -51,7 +51,7 @@ async function extractDataBFS() {
   // console.log("Curren queue size: " + queue.length);
   while (queue.length > 0) {
     var levelSize = queue.length;
-    console.log("current level size: " + levelSize);
+    // console.log("current level size: " + levelSize);
     for (var lvl = 0; lvl < levelSize; lvl++) {
       var currLink = queue[0];
       // console.log("current link " + currLink);
@@ -72,7 +72,7 @@ async function extractDataBFS() {
           if (mailAddr != null) {
             if (emails.has(mailAddr) === false) {
               emails.add(mailAddr);
-              console.log("mail address: " + mailAddr);
+              // console.log("mail address: " + mailAddr);
             }
           }
 
@@ -86,16 +86,14 @@ async function extractDataBFS() {
             }
           }
         }
-
-  
       }
     }
     depth++;
-    if (depth > 2 || emails.length > 30) {
+    if (depth > 2 || emails.size > 10 || hyperlinks.size > 100) {
       console.log(hyperlinks);
+      console.log(emails);
       return;
     }
-
   }
 }
 
@@ -112,14 +110,14 @@ function extractData(tempRoot, depth) {
       if (links[i].attrs.href.match(emailRegex) != null) {
         let mailAddr = links[i].attrs.href.match(emailRegex);
         emails.push(mailAddr);
-        console.log("mail address: " + mailAddr);
+        // console.log("mail address: " + mailAddr);
       }
       // Hyperlinks Regex
       if (links[i].attrs.href.match(hyperlinksRegex) != null) {
         let linkAddr = links[i].attrs.href.match(hyperlinksRegex);
         if (hyperlinks.has(linkAddr) === false) {
           hyperlinks.add(linkAddr);
-          console.log(linkAddr);
+          // console.log(linkAddr);
         }
       }
     }
@@ -159,7 +157,7 @@ const Popup = () => {
     // Data Broker Email Address
     // Right here vvv
     // var emailTwo = setBroker(target.value);
-    var emailTwo = emails;
+    var emailTwo = Array.from(emails);
     var emailThree = "&su=";
     var emailFour = "Right to Access Request (Section 110 of the CCPA)";
     var emailFive = "&body=";
