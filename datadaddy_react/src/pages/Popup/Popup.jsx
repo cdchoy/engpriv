@@ -25,13 +25,20 @@ require('react-dom');
 window.React2 = require('react');
 console.log(window.React1 === window.React2);
 
+// function to return the url of the current tab
+async function getCurrentTabUrl() {
+  let queryOptions = { active: true, currentWindow: true };
+  let [tab] = await chrome.tabs.query(queryOptions);
+  return tab.url;
+}
+
 var root;
 var emails = new Set();
 var hyperlinks = new Set();
 var emailRegex = /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi;
 var hyperlinksRegex = /^(ftp|http|https):\/\/[^ "]+$/gi;
 var deep = 0;
-const url = 'https://www.reddit.com/';
+var tabUrl;
 var queue = [];
 
 async function scrape() {
@@ -39,9 +46,9 @@ async function scrape() {
 }
 
 async function extractDataBFS() {
+  const url = await getCurrentTabUrl();
   var depth = 0;
   queue.push(url);
-  console.log(queue[0]);
   while (queue.length > 0) {
 
     var levelSize = queue.length;
@@ -76,6 +83,7 @@ async function extractDataBFS() {
       }
     }
     depth++;
+    console.log(hyperlinks);
     if (depth > 2 || emails.size > 10 || hyperlinks.size > 100) {
       console.log(hyperlinks);
       console.log(emails);
