@@ -8,28 +8,36 @@ Boilerplate for this code was taken from Michael Xieyang Liu's [Github](https://
 
 ## TODO
 
+### Hardcode Integration
+- [ ] Stuff to do
+
 ### Crawler
 - [X] Add RegEx to parse emails
 - [X] Settle on a crawling algorithm
 - [X] Set up (probably recursive) Fetch calls
-- [ ] Dynamically load url from current tab
-- [ ] Debug infinite fetch calls
-- [ ] Integrate crawler
+- [X] Dynamically load url from current tab
+- [X] Debug infinite fetch calls
+- [X] Integrate crawler
+- [ ] Load in URL from current tab
+- [ ] Optimize: Identify why email scrape results are inconsistent
+- [ ] Optimize: Filter out irrelevant emails
 
 ### Form Filling Automation
-- [X] Touch base with OneTrust
-- [ ] Create Data Flow Diagram for OneTrust DSAR Module
-- [ ] Research MUI AutoComplete
+- [ ] Establish workflow and data pipeline
 
 ### Voice Assistant Integration
-- [ ] Research Siri API
+- [X] Research Siri API (Not doable without creating an Android App)
 - [ ] Research Alexa API
 - [ ] Research Google Assistant API
 
-### NLP
+#### NLP
 - [X] Research NLP libraries in JavaScript/TypeScript
 - [ ] Settle on library choice
 - [ ] Develop and train model on Privacy Policies or Privacy Pages
+
+#### Personalized Emoji
+- [ ] Snapchat version not doable
+- [ ] MeMoji potentially doable, would need to create our own Privacy Assistant MeMoji using Apple's SDK
 
 ## Setup and Usage
 
