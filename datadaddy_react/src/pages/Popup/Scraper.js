@@ -8,69 +8,76 @@ const JSSoup = require('jssoup').default;
 require('react-dom');
 window.React2 = require('react');
 console.log(window.React1 === window.React2);
+
 let root;
-var emails = [];
-var hyperlinks = [];
-var emailRegex = /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi;
-var hyperlinksRegex = /^(ftp|http|https):\/\/[^ "]+$/gi;
-var deep = 0;
-const url = 'https://docs.github.com/en/github/site-policy/github-privacy-statement';
+let emails = new Set();
+let hyperlinks = new Set();
+const emailRegex = /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi;
+const hyperlinksRegex = /^(ftp|http|https):\/\/[^ "]+$/gi;
+let deep = 0;
+let tabUrl;
+let queue = [];
 
-function scrape(url) {
-  fetch(`${url}`)
-  .then(res => res.text())
-  .then(body => root = HTMLParser.parse(body))
-  .then(() => extractData(root, deep))
-
-  function extractData(root, depth) {
-    if (depth === 1) { return }
-    if (depth > 3) { return }
-    const soup = new JSSoup(root);
-    var links = soup.findAll('a');
-
-    for (let i in links) {
-        if (links[i].attrs.href !== undefined) {
-        // Email Regex
-        if (links[i].attrs.href.match(emailRegex) !== null) {
-            emails.push(links[i].attrs.href.match(emailRegex));
-        }
-        // Hyperlinks Regex
-        if (links[i].attrs.href.match(hyperlinksRegex) !== null) {
-            hyperlinks.push(links[i].attrs.href.match(hyperlinksRegex));
-        }
-        }
-    }
-
-    for (let i in hyperlinks) {
-        var newRoot;
-        fetch(`${hyperlinks[i]}`)
-        .then(newRes => newRes.text())
-        .then(newBody => newRoot = HTMLParser.parse(newBody))
-        .then(() => extractData(newRoot, depth + 1))
-
-        var newSoup = new JSSoup(newRoot);
-        var newLinks = newSoup.findAll('a');
-
-        for (let i in newLinks) {
-        if (newLinks[i].attrs.href !== undefined) {
+// function to return the url of the current tab
+async function getCurrentTabUrl() {
+    let queryOptions = { active: true, currentWindow: true };
+    let [tab] = await chrome.tabs.query(queryOptions);
+    return tab.url;
+  }
+  
+  async function scrape() {
+      extractDataBFS();
+  }
+  
+  async function extractDataBFS() {
+    const url = await getCurrentTabUrl();
+    var depth = 0;
+    queue.push(url);
+    while (queue.length > 0) {
+  
+      var levelSize = queue.length;
+  
+      for (var lvl = 0; lvl < levelSize; lvl++) {
+        var currLink = queue[0];      
+        queue.shift();
+        var rootBfs = await fetch(`${currLink}`)
+          .then(resBfs => resBfs.text())
+          .then(bodyBfs => HTMLParser.parse(bodyBfs));
+        const soupBfs = new JSSoup(rootBfs);
+        var linksBfs = soupBfs.findAll('a');
+        for (let i in linksBfs) {
+          if (linksBfs[i].attrs.href !== undefined) {
             // Email Regex
-            if (newLinks[i].attrs.href.match(emailRegex) !== null) {
-            emails.push(links[i].attrs.href.match(emailRegex));
+            let mailAddr = linksBfs[i].attrs.href.match(emailRegex);
+            if (mailAddr != null) {
+              if (emails.has(mailAddr) === false) {
+                emails.add(mailAddr);
+              }
             }
+  
             // Hyperlinks Regex
-            if (newLinks[i].attrs.href.match(hyperlinksRegex) !== null) {
-            hyperlinks.push(links[i].attrs.href.match(hyperlinksRegex));
+            let linkAddr = linksBfs[i].attrs.href.match(hyperlinksRegex);
+            if (linkAddr != null) {
+              if (hyperlinks.has(linkAddr) === false) {
+                queue.push(linkAddr);
+                hyperlinks.add(linkAddr);
+              }
             }
+          }
         }
-        }
+      }
+      depth++;
+      console.log(hyperlinks);
+      if (depth > 2 || emails.size > 10 || hyperlinks.size > 100) {
+        console.log(hyperlinks);
+        console.log(emails);
+        return;
+      }
     }
-    console.log(emails);
-    console.log(hyperlinks);
-    }
-}
+  }
 
 const ScrapeButton = () => {
-  return <MuiButton variant="contained" onClick={scrape(url)} sx={{ width: 250, height: 50, alignContent: 'flex-start', mt: 1 }}>Scrape</MuiButton>
+  return <MuiButton variant="contained" onClick={() => scrape()} sx={{ width: 250, height: 50, alignContent: 'flex-start', mt: 1 }}>Scrape</MuiButton>
 }
 
 export default ScrapeButton;
