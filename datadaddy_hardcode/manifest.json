@@ -15,7 +15,7 @@
     },
     "content_scripts": [
         {
-            "matches": ["https://*/*", "http://*/*"],
+            "matches": ["https://www.nytimes.com/*", "http://*/*"],
             "js": ["src/external/psl.min.js", "src/content-script.js"]
         }
     ],

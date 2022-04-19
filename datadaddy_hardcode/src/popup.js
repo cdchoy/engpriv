@@ -58,6 +58,24 @@ rtkButton.addEventListener("click", () => {
     let newUrl = rtkButton.getAttribute("href");
     if (!newUrl) return; // do nothing
     chrome.tabs.create({url: newUrl});
+    //var test = document.querySelectorAll("form");
+    //alert(test[0]);
+    /*
+    var blah = test[0];
+    var idk = blah[0];
+    var formName = blah[0].name;
+    var formOptions = blah[0].options;
+    idk.value = "Albania";
+    alert("WOW");
+    */
+    //var country = document.getElementsByClassName("country").value="Brazil";
+    /*var test = document.querySelectorAll("form")[0];
+    var idk = test[0];
+    var idk_val = idk.value;
+    alert(idk_val);*/
+    
+    
+
 });
 
 emailButton.addEventListener("click", async () => {
