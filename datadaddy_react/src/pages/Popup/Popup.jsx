@@ -1,87 +1,67 @@
 import React from 'react';
-import logo from '../../assets/img/logo.svg';
-import datadaddy from '../../assets/img/DataDaddyLogo.png';
-import Greetings from '../../containers/Greetings/Greetings';
 import './Popup.css';
+
 import TextField from '@mui/material/TextField';
-import MuiButton from '@mui/material/Button';
 import SendIcon from '@mui/icons-material/Send';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
-import InputBase from '@mui/material/InputBase';
-import { styled } from '@mui/material/styles';
-import { getElementById } from 'domutils';
-import Tautologistics from 'htmlparser';
-import { useState, useEffect } from 'react';
 import SettingsIcon from '@mui/icons-material/Settings';
+import PopupButton from './PopupButton.js';
+import generateEmail from './GenerateEmail';
+import ScrapeButton from './Scraper';
+import domainData from '../../assets/data/domainMap.json';
+import { height } from '@mui/system';
 
-const HTMLParser = require('node-html-parser')
+export default class Popup extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      domain: "loading...",
+      ppHref: "",
+      onlineFormHref: "",
+      emailHref: ""
+    };
+  }
 
-const JSSoup = require('jssoup').default;
+  componentDidMount() {
+    this.update();    
+    this.updateID = setInterval(() => this.update(), 3_000);
+  }
 
-// Add this in your component file
-require('react-dom');
-window.React2 = require('react');
-console.log(window.React1 === window.React2);
+  componentWillUnmount() {
+    clearInterval(this.updateID);
+  }
 
-let root;
-var emails = [];
-var hyperlinks = [];
-var emailRegex = /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi;
-var hyperlinksRegex = /^(ftp|http|https):\/\/[^ "]+$/gi;
-var deep = 0;
-const url = 'https://docs.github.com/en/github/site-policy/github-privacy-statement';
+  setDefaultState() {
+    this.setState({
+      domain: "loading...",
+      ppHref: "",
+      onlineFormHref: "",
+      emailHref: ""
+    });
+  }
 
-async function scrape() {
-
-  fetch(`${url}`)
-    .then(res => res.text())
-    .then(body => root = HTMLParser.parse(body))
-    .then(() => extractData(root, deep))
-
-  function extractData(root, depth) {
-    if (depth === 1) { return }
-    if (depth > 3) { return }
-    const soup = new JSSoup(root);
-    var links = soup.findAll('a');
-
-    for (let i in links) {
-      if (links[i].attrs.href !== undefined) {
-        // Email Regex
-        if (links[i].attrs.href.match(emailRegex) !== null) {
-          emails.push(links[i].attrs.href.match(emailRegex));
-        }
-        // Hyperlinks Regex
-        if (links[i].attrs.href.match(hyperlinksRegex) !== null) {
-          hyperlinks.push(links[i].attrs.href.match(hyperlinksRegex));
-        }
+  update() {
+    chrome.storage.sync.get('domain', (results) => {
+      if (!results.domain) {
+        this.setDefaultState();
+        return;
       }
-    }
+      this.setState({domain: results.domain});
 
-    for (let i in hyperlinks) {
-      var newRoot;
-      fetch(`${hyperlinks[i]}`)
-        .then(newRes => newRes.text())
-        .then(newBody => newRoot = HTMLParser.parse(newBody))
-        .then(() => extractData(newRoot, depth + 1))
-
-      var newSoup = new JSSoup(newRoot);
-      var newLinks = newSoup.findAll('a');
-
-      for (let i in newLinks) {
-        if (newLinks[i].attrs.href !== undefined) {
-          // Email Regex
-          if (newLinks[i].attrs.href.match(emailRegex) !== null) {
-            emails.push(links[i].attrs.href.match(emailRegex));
-          }
-          // Hyperlinks Regex
-          if (newLinks[i].attrs.href.match(hyperlinksRegex) !== null) {
-            hyperlinks.push(links[i].attrs.href.match(hyperlinksRegex));
-          }
-        }
+      let domainInfo = this.getDomainInfo(results.domain);
+      if (domainInfo) {
+        this.setState({
+          ppHref: domainInfo.privacy_policy,
+          onlineFormHref: domainInfo.rtk_form,
+          emailHref: generateEmail(domainInfo.email)
+        });
+      } else {
+        this.setState({
+          ppHref: "",
+          onlineFormHref: "",
+          emailHref: ""
+        });
       }
+<<<<<<< HEAD
     }
     console.log(emails);
     console.log(hyperlinks);
@@ -336,7 +316,52 @@ const Popup = () => {
       </footer>
     </div>
   );
+=======
+    });
+  }
+
+  getDomainInfo(domainString) {
+    if (!domainString) return null;
+    for (var i = 0; i < domainData.length; i++) {
+      let item = domainData[i];
+      if (domainString.toLowerCase() === item.domain.toLowerCase()) {
+        return item;
+      }
+    }
+    return null;
+  }
+
+  render() {
+    return (
+      <div className="App">
+        <header className="App-header">
+          <script defer src="./dist/bundle.js" />
+          <DataDaddyLogo/>
+        </header>
+  
+        <p className="Gray">You are on: <span className="Red">{this.state.domain}</span></p>
+        <TextField id="userName" label="Your Name" variant="outlined" sx={{ width: 250, height: 56, mt: 1 }} />
+        <PopupButton text="Privacy Policy" href={this.state.ppHref}/>
+        <PopupButton text="Online Form" href={this.state.onlineFormHref}/>
+        <PopupButton text="Email Request" icon={<SendIcon/>} href={this.state.emailHref}/> 
+  
+        <footer className='App-footer'>
+          <ScrapeButton/>
+        </footer>
+      </div>
+    );
+  }
+>>>>>>> 5bbc72ef236145b3ab3f63764a9ae91e5ac13777
 };
 
-export default Popup;
-
+const DataDaddyLogo = () => {
+  return (
+    <p className="Logo-text">
+      <span className="App-text-one Gray">datadaddy.</span>
+      <span className="App-text-two Blue">CC</span>
+      <span className="App-text-two Red">P</span>
+      <span className="App-text-two Blue">A</span>
+      <SettingsIcon variant="outlined" className="Gray"/>
+    </p>
+  )
+}
