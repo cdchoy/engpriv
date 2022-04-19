@@ -8,7 +8,6 @@ import PopupButton from './PopupButton.js';
 import generateEmail from './GenerateEmail';
 import ScrapeButton from './Scraper';
 import domainData from '../../assets/data/domainMap.json';
-import { height } from '@mui/system';
 
 export default class Popup extends React.Component {
   constructor(props) {

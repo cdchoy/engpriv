@@ -18,7 +18,7 @@ Boilerplate for this code was taken from Michael Xieyang Liu's [Github](https://
 - [X] Dynamically load url from current tab
 - [X] Debug infinite fetch calls
 - [X] Integrate crawler
-- [ ] Load in URL from current tab
+- [x] Load in URL from current tab
 - [ ] Optimize: Identify why email scrape results are inconsistent
 - [ ] Optimize: Filter out irrelevant emails
 
