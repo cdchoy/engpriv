@@ -4,10 +4,11 @@ import './Popup.css';
 import TextField from '@mui/material/TextField';
 import SendIcon from '@mui/icons-material/Send';
 import SettingsIcon from '@mui/icons-material/Settings';
-import PopupButton from './Button.js';
+import PopupButton from './PopupButton.js';
 import generateEmail from './GenerateEmail';
 import ScrapeButton from './Scraper';
 import domainData from '../../assets/data/domainMap.json';
+import { height } from '@mui/system';
 
 export default class Popup extends React.Component {
   constructor(props) {
@@ -21,9 +22,8 @@ export default class Popup extends React.Component {
   }
 
   componentDidMount() {
-    // this.setDebugDefaults();
     this.update();    
-    this.updateID = setInterval(() => this.update(), 1000);
+    this.updateID = setInterval(() => this.update(), 3_000);
   }
 
   componentWillUnmount() {
@@ -39,15 +39,12 @@ export default class Popup extends React.Component {
     });
   }
 
-  setDebugDefaults() {
-    this.ppHref = "https://www.redditinc.com/policies/privacy-policy";
-    this.emailHref = generateEmail(["privacy@towerdata.com"]);
-  }
-
   update() {
-    this.setDefaultState();
     chrome.storage.sync.get('domain', (results) => {
-      if (!results.domain) return;
+      if (!results.domain) {
+        this.setDefaultState();
+        return;
+      }
       this.setState({domain: results.domain});
 
       let domainInfo = this.getDomainInfo(results.domain);
@@ -56,6 +53,12 @@ export default class Popup extends React.Component {
           ppHref: domainInfo.privacy_policy,
           onlineFormHref: domainInfo.rtk_form,
           emailHref: generateEmail(domainInfo.email)
+        });
+      } else {
+        this.setState({
+          ppHref: "",
+          onlineFormHref: "",
+          emailHref: ""
         });
       }
     });
@@ -80,8 +83,8 @@ export default class Popup extends React.Component {
           <DataDaddyLogo/>
         </header>
   
-        <p>You are on {this.state.domain}</p>
-        {/* <TextField id="userName" label="Your Name" variant="outlined" sx={{ width: 250, height: 56, mt: 1 }} /> */}
+        <p className="Gray">You are on: <span className="Red">{this.state.domain}</span></p>
+        <TextField id="userName" label="Your Name" variant="outlined" sx={{ width: 250, height: 56, mt: 1 }} />
         <PopupButton text="Privacy Policy" href={this.state.ppHref}/>
         <PopupButton text="Online Form" href={this.state.onlineFormHref}/>
         <PopupButton text="Email Request" icon={<SendIcon/>} href={this.state.emailHref}/> 
