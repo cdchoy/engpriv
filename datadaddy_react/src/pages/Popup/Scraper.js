@@ -64,8 +64,9 @@ async function extractDataBFS() {
       }
     }
     depth++;
-    console.log(hyperlinks);
+    console.log(depth, hyperlinks);
     if (depth > 2 || emails.size > 10 || hyperlinks.size > 100) {
+      console.log("Crawl complete")
       console.log(hyperlinks);
       console.log(emails);
       return;
