@@ -1,4 +1,4 @@
-export const domainData = [
+[
     {
         "domain": "google.com",
         "privacy_policy": "https://policies.google.com/privacy?hl=en",

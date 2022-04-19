@@ -1,6 +1,7 @@
 import React from "react";
 
 export default function generateEmail(recipients) {
+    if (!recipients) return null;
     const urlprefix = "https://mail.google.com/mail/?view=cm&fs=1";
     const emailTo = "&to=" + recipients;
     const emailSubject = "&su=Right to Access Request (Section 110 of the CCPA)";

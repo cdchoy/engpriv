@@ -7,43 +7,69 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import PopupButton from './Button.js';
 import generateEmail from './GenerateEmail';
 import ScrapeButton from './Scraper';
-import { domainData } from '../../assets/data/domainMap';
+import domainData from '../../assets/data/domainMap.json';
 
 export default class Popup extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       domain: "loading...",
+      ppHref: "",
+      onlineFormHref: "",
+      emailHref: ""
     };
   }
 
   componentDidMount() {
-    this.setDebugDefaults();
-    this.timerID = setInterval(
-      () => this.tick(),
-      500
-    )
+    // this.setDebugDefaults();
+    this.update();    
+    this.updateID = setInterval(() => this.update(), 1000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.updateID);
+  }
+
+  setDefaultState() {
+    this.setState({
+      domain: "loading...",
+      ppHref: "",
+      onlineFormHref: "",
+      emailHref: ""
+    });
   }
 
   setDebugDefaults() {
     this.ppHref = "https://www.redditinc.com/policies/privacy-policy";
-    this.emailHref = generateEmail(["privacy@towerdata.com"])
+    this.emailHref = generateEmail(["privacy@towerdata.com"]);
   }
 
-  tick() {
+  update() {
+    this.setDefaultState();
     chrome.storage.sync.get('domain', (results) => {
-      if (results.domain) {
+      if (!results.domain) return;
+      this.setState({domain: results.domain});
+
+      let domainInfo = this.getDomainInfo(results.domain);
+      if (domainInfo) {
         this.setState({
-          domain: results.domain,
-        })
+          ppHref: domainInfo.privacy_policy,
+          onlineFormHref: domainInfo.rtk_form,
+          emailHref: generateEmail(domainInfo.email)
+        });
       }
-    })
+    });
   }
 
-  getDomainInfo() {
-    for (let item in domainData) {
-      console.log(item);
+  getDomainInfo(domainString) {
+    if (!domainString) return null;
+    for (var i = 0; i < domainData.length; i++) {
+      let item = domainData[i];
+      if (domainString.toLowerCase() === item.domain.toLowerCase()) {
+        return item;
+      }
     }
+    return null;
   }
 
   render() {
@@ -55,10 +81,10 @@ export default class Popup extends React.Component {
         </header>
   
         <p>You are on {this.state.domain}</p>
-        <TextField id="userName" label="Your Name" variant="outlined" sx={{ width: 250, height: 56, mt: 1 }} />
-        <PopupButton text="Privacy Policy" href={this.ppHref}/>
-        <PopupButton text="Online Form" href={this.onlineFormHref}/>
-        <PopupButton text="Email Request" icon={<SendIcon/>} href={this.emailHref}/> 
+        {/* <TextField id="userName" label="Your Name" variant="outlined" sx={{ width: 250, height: 56, mt: 1 }} /> */}
+        <PopupButton text="Privacy Policy" href={this.state.ppHref}/>
+        <PopupButton text="Online Form" href={this.state.onlineFormHref}/>
+        <PopupButton text="Email Request" icon={<SendIcon/>} href={this.state.emailHref}/> 
   
         <footer className='App-footer'>
           <ScrapeButton/>
