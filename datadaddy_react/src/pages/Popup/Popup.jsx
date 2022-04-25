@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import './Popup.css';
 
 import TextField from '@mui/material/TextField';
@@ -16,7 +16,8 @@ export default class Popup extends React.Component {
       domain: "loading...",
       ppHref: "",
       onlineFormHref: "",
-      emailHref: ""
+      emailHref: "",
+      sender: ""
     };
   }
 
@@ -34,7 +35,8 @@ export default class Popup extends React.Component {
       domain: "loading...",
       ppHref: "",
       onlineFormHref: "",
-      emailHref: ""
+      emailHref: "",
+      sender: ""
     });
   }
 
@@ -51,7 +53,7 @@ export default class Popup extends React.Component {
         this.setState({
           ppHref: domainInfo.privacy_policy,
           onlineFormHref: domainInfo.rtk_form,
-          emailHref: generateEmail(domainInfo.email)
+          emailHref: generateEmail(domainInfo.email, this.state.sender)
         });
       } else {
         this.setState({
@@ -74,6 +76,12 @@ export default class Popup extends React.Component {
     return null;
   }
 
+  handleChange(e) {
+    let value = e.target.value;
+    console.log("NAME:", value);
+    // this.setState({sender: value});  //todo: this doesn't work
+  }
+
   render() {
     return (
       <div className="App">
@@ -83,7 +91,7 @@ export default class Popup extends React.Component {
         </header>
   
         <p className="Gray">You are on: <span className="Red">{this.state.domain}</span></p>
-        <TextField id="userName" label="Your Name" variant="outlined" sx={{ width: 250, height: 56, mt: 1 }} />
+        <TextField id="userName" label="Your Name" variant="outlined" sx={{ width: 250, height: 56, mt: 1 }} onChange={this.handleChange}/>
         <PopupButton text="Privacy Policy" href={this.state.ppHref}/>
         <PopupButton text="Online Form" href={this.state.onlineFormHref}/>
         <PopupButton text="Email Request" icon={<SendIcon/>} href={this.state.emailHref}/> 
@@ -97,8 +105,12 @@ export default class Popup extends React.Component {
 };
 
 const DataDaddyLogo = () => {
+  function gotoOptions() {
+    console.log("poop");
+    window.open(chrome.runtime.getURL('options.html'));
+  }
   return (
-    <p className="Logo-text">
+    <p className="Logo-text" onClick={() => gotoOptions()}>
       <span className="App-text-one Gray">datadaddy.</span>
       <span className="App-text-two Blue">CC</span>
       <span className="App-text-two Red">P</span>
