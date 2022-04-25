@@ -1,6 +1,8 @@
 import React from "react";
 
 export default function generateEmail(recipients, sender) {
+    console.log("here1");
+    console.log("recipients are " + recipients);
     if (!recipients) return null;
     const urlprefix = "https://mail.google.com/mail/?view=cm&fs=1";
     const emailTo = "&to=" + recipients;

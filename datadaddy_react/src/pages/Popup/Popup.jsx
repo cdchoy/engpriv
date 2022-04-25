@@ -8,6 +8,8 @@ import PopupButton from './PopupButton.js';
 import generateEmail from './GenerateEmail';
 import ScrapeButton from './Scraper';
 import domainData from '../../assets/data/domainMap.json';
+import EmailButton from './EmailButton';
+import Scraper from './Scraper';
 
 export default class Popup extends React.Component {
   constructor(props) {
@@ -17,7 +19,8 @@ export default class Popup extends React.Component {
       ppHref: "",
       onlineFormHref: "",
       emailHref: "",
-      sender: ""
+      sender: "",
+      scraperMail: ""
     };
   }
 
@@ -36,7 +39,8 @@ export default class Popup extends React.Component {
       ppHref: "",
       onlineFormHref: "",
       emailHref: "",
-      sender: ""
+      sender: "",
+      scraperMail: ""
     });
   }
 
@@ -49,6 +53,7 @@ export default class Popup extends React.Component {
       this.setState({domain: results.domain});
 
       let domainInfo = this.getDomainInfo(results.domain);
+      let scraperMail = new Scraper;
       if (domainInfo) {
         this.setState({
           ppHref: domainInfo.privacy_policy,
@@ -59,7 +64,8 @@ export default class Popup extends React.Component {
         this.setState({
           ppHref: "",
           onlineFormHref: "",
-          emailHref: ""
+          emailHref: generateEmail(scraperMail.mail, this.state.sender),
+          scraperMail: generateEmail(scraperMail.mail, this.state.sender)
         });
       }
     });
@@ -96,6 +102,7 @@ export default class Popup extends React.Component {
         <PopupButton text="Privacy Policy" href={this.state.ppHref}/>
         <PopupButton text="Online Form" href={this.state.onlineFormHref}/>
         <PopupButton text="Email Request" icon={<SendIcon/>} href={this.state.emailHref}/> 
+        <EmailButton text="Email Request" icon={<SendIcon/>} href={this.state.scraperMail}/> 
   
         <footer className='App-footer'>
           <ScrapeButton/>

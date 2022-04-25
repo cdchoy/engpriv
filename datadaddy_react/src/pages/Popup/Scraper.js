@@ -1,5 +1,6 @@
 import React from "react";
 import MuiButton from '@mui/material/Button';
+import generateEmail from './GenerateEmail';
 
 const HTMLParser = require('node-html-parser')
 const JSSoup = require('jssoup').default;
@@ -9,19 +10,72 @@ require('react-dom');
 window.React2 = require('react');
 // console.log(window.React1 === window.React2);
 
+class Scraper extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      links: "loading...",
+      mail: "loading...",
+    };
+  }
+
+  componentDidMount() {
+    this.update();
+    this.updateID = setInterval(() => this.update(), 3_000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.updateID);
+  }
+
+  setDefaultState() {
+    this.setState({
+      links: "loading...",
+      mail: "loading...",
+    });
+  }
+
+  update() {
+
+    this.setState({ links: hyperlinks });
+    this.setState({ mail: emails });
+
+    if (flag) {
+      this.setState({
+        links: hyperlinks,
+        mail: generateEmail(emails, this.state.sender),
+      });
+    } else {
+      this.setState({
+        links: "",
+        mail: "",
+      });
+    }
+  }
+
+  render() {
+    return (
+      <div className="Scraper">
+        <PopupButton text="Email Request" icon={<SendIcon />} href={this.state.emailHref} />
+      </div>
+    );
+  }
+}
+
 let emails = new Set();
 let hyperlinks = new Set();
 const emailRegex = /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi;
 const hyperlinksRegex = /^(ftp|http|https):\/\/[^ "]+$/gi;
 let queue = [];
+let flag = false;
 
 // function to return the url of the current tab
 async function getCurrentTabUrl() {
-    let queryOptions = { active: true, currentWindow: true };
-    let [tab] = await chrome.tabs.query(queryOptions);
-    return tab.url;
-  }
-  
+  let queryOptions = { active: true, currentWindow: true };
+  let [tab] = await chrome.tabs.query(queryOptions);
+  return tab.url;
+}
+
 async function scrape() {
   extractDataBFS();
 }
@@ -35,7 +89,7 @@ async function extractDataBFS() {
     var levelSize = queue.length;
 
     for (var lvl = 0; lvl < levelSize; lvl++) {
-      var currLink = queue[0];      
+      var currLink = queue[0];
       queue.shift();
       var rootBfs = await fetch(`${currLink}`)
         .then(resBfs => resBfs.text())
@@ -69,6 +123,14 @@ async function extractDataBFS() {
       console.log("Crawl complete")
       console.log(hyperlinks);
       console.log(emails);
+      console.log("fuck");
+
+      flag = true;
+      console.log(this.mail);
+
+      update();
+      this.setState({ mail: generateEmail(emails, "dave") });
+      console.log(this.mail);
       return;
     }
   }
