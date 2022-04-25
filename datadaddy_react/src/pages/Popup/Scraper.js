@@ -75,7 +75,7 @@ async function extractDataBFS() {
 }
 
 const ScrapeButton = () => {
-  return <MuiButton variant="contained" onClick={() => scrape()} sx={{ width: 250, height: 50, alignContent: 'flex-start', mt: 1 }}>Scrape</MuiButton>
+  return <MuiButton variant="contained" onClick={() => scrape()} sx={{ width: 250, height: 56, alignContent: 'flex-start', mt: 1 }}>Gather Emails</MuiButton>
 }
 
 export default ScrapeButton;
