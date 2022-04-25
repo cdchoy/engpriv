@@ -16,9 +16,10 @@ export default class Popup extends React.Component {
       domain: "loading...",
       ppHref: "",
       onlineFormHref: "",
-      emailHref: "",
-      sender: ""
+      emailHref: ""
     };
+    // const [sender, setSender] = React.useState('');
+    this.sender = "Dave";
   }
 
   componentDidMount() {
@@ -35,8 +36,7 @@ export default class Popup extends React.Component {
       domain: "loading...",
       ppHref: "",
       onlineFormHref: "",
-      emailHref: "",
-      sender: ""
+      emailHref: ""
     });
   }
 
@@ -53,7 +53,7 @@ export default class Popup extends React.Component {
         this.setState({
           ppHref: domainInfo.privacy_policy,
           onlineFormHref: domainInfo.rtk_form,
-          emailHref: generateEmail(domainInfo.email, this.state.sender)
+          emailHref: generateEmail(domainInfo.email, this.sender)
         });
       } else {
         this.setState({
@@ -79,6 +79,7 @@ export default class Popup extends React.Component {
   handleChange(e) {
     let value = e.target.value;
     console.log("NAME:", value);
+    // this.setSender(value);
     // this.setState({sender: value});  //todo: this doesn't work
   }
 
