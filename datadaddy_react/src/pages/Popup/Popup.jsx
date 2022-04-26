@@ -10,6 +10,8 @@ import ScrapeButton, { scrapeEmails } from './Scraper';
 import domainData from '../../assets/data/domainMap.json';
 import EmailButton from './EmailButton';
 
+
+
 export default class Popup extends React.Component {
   constructor(props) {
     super(props);
@@ -47,7 +49,7 @@ export default class Popup extends React.Component {
         this.setDefaultState();
         return;
       }
-      this.setState({domain: results.domain});
+      this.setState({ domain: results.domain });
 
       let domainInfo = this.getDomainInfo(results.domain);
       if (domainInfo) {
@@ -95,9 +97,9 @@ export default class Popup extends React.Component {
       <div className="App">
         <header className="App-header">
           <script defer src="./dist/bundle.js" />
-          <DataDaddyLogo/>
+          <DataDaddyLogo />
         </header>
-  
+
         {/* {this.state.domain} */}
         <p className="Gray"><span className="Red">{this.state.domain}</span></p>
         <TextField id="userName" label="Your Name" variant="outlined" sx={{ width: 250, height: 56, mt: 1 }} onChange={this.handleChange}/>
@@ -106,7 +108,7 @@ export default class Popup extends React.Component {
         <PopupButton text="Email Request" icon={<SendIcon/>} href={this.state.emailHref} loading={this.state.emailLoading}/> 
   
         <footer className='App-footer'>
-          <ScrapeButton/>
+          <ScrapeButton />
         </footer>
       </div>
     );
@@ -124,7 +126,7 @@ const DataDaddyLogo = () => {
       <span className="App-text-two Blue">CC</span>
       <span className="App-text-two Red">P</span>
       <span className="App-text-two Blue">A</span>
-      <SettingsIcon variant="outlined" className="Gray"/>
+      <SettingsIcon variant="outlined" className="Gray" />
     </p>
   )
 }
