@@ -1,4 +1,5 @@
 import React, { useRef } from 'react';
+import { useState } from 'react';
 import './Popup.css';
 
 import TextField from '@mui/material/TextField';
@@ -10,6 +11,8 @@ import ScrapeButton from './Scraper';
 import domainData from '../../assets/data/domainMap.json';
 import EmailButton from './EmailButton';
 import Scraper from './Scraper';
+
+
 
 export default class Popup extends React.Component {
   constructor(props) {
@@ -25,7 +28,7 @@ export default class Popup extends React.Component {
   }
 
   componentDidMount() {
-    this.update();    
+    this.update();
     this.updateID = setInterval(() => this.update(), 3_000);
   }
 
@@ -50,7 +53,7 @@ export default class Popup extends React.Component {
         this.setDefaultState();
         return;
       }
-      this.setState({domain: results.domain});
+      this.setState({ domain: results.domain });
 
       let domainInfo = this.getDomainInfo(results.domain);
       let scraperMail = new Scraper;
@@ -85,6 +88,9 @@ export default class Popup extends React.Component {
   handleChange(e) {
     let value = e.target.value;
     console.log("NAME:", value);
+    // myFunctionalComponentFunction();
+    this.setState({sender: value});
+    // console.log("sender state is " + this.sender.state);
     // this.setState({sender: value});  //todo: this doesn't work
   }
 
@@ -93,24 +99,38 @@ export default class Popup extends React.Component {
       <div className="App">
         <header className="App-header">
           <script defer src="./dist/bundle.js" />
-          <DataDaddyLogo/>
+          <DataDaddyLogo />
         </header>
-  
+
         {/* {this.state.domain} */}
-        {/* <p className="Gray"><span className="Red">{this.state.domain}</span></p> */}
-        <TextField id="userName" label="Your Name" variant="outlined" sx={{ width: 250, height: 56, mt: 1 }} onChange={this.handleChange}/>
-        <PopupButton text="Privacy Policy" href={this.state.ppHref}/>
-        <PopupButton text="Online Form" href={this.state.onlineFormHref}/>
-        <PopupButton text="Email Request" icon={<SendIcon/>} href={this.state.emailHref}/> 
-        <EmailButton text="Email Request" icon={<SendIcon/>} href={this.state.scraperMail}/> 
-  
+        <p className="Gray"><span className="Red">{this.state.domain}</span></p>
+        <TextField id="userName" label="Your Name" variant="outlined" sx={{ width: 250, height: 56, mt: 1 }} onChange={this.handleChange} />
+        <PopupButton text="Privacy Policy" href={this.state.ppHref} />
+        <PopupButton text="Online Form" href={this.state.onlineFormHref} />
+        <PopupButton text="Email Request" icon={<SendIcon />} href={this.state.emailHref} />
+        <EmailButton text="Email Request" icon={<SendIcon />} href={this.state.scraperMail} />
+
         <footer className='App-footer'>
-          <ScrapeButton/>
+          <ScrapeButton />
         </footer>
       </div>
     );
   }
 };
+
+function myFunctionalComponentFunction() {
+  console.log("here");
+  const [input, setInput] = useState(''); // '' is the initial state value
+  console.log(setInput);
+
+  return (
+    <div>
+      <TextField id="userName" label="Your Name" variant="outlined" sx={{ width: 250, height: 56, mt: 1 }} onChange={this.handleChange} />
+      <label>Please specify:</label>
+      <input value={input} onInput={e => setInput(e.target.value)} />
+    </div>
+  );
+}
 
 const DataDaddyLogo = () => {
   function gotoOptions() {
@@ -123,7 +143,7 @@ const DataDaddyLogo = () => {
       <span className="App-text-two Blue">CC</span>
       <span className="App-text-two Red">P</span>
       <span className="App-text-two Blue">A</span>
-      <SettingsIcon variant="outlined" className="Gray"/>
+      <SettingsIcon variant="outlined" className="Gray" />
     </p>
   )
 }
