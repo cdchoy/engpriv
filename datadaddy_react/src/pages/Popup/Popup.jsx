@@ -98,11 +98,11 @@ export default class Popup extends React.Component {
         </header>
 
         {/* {this.state.domain} */}
-        <p className="Gray"><span className="Red">{this.state.domain}</span></p>
+        {/* <p className="Gray"><span className="Red">{this.state.domain}</span></p> */}
         <TextField id="userName" label="Your Name" variant="outlined" sx={{ width: 250, height: 56, mt: 1 }} onChange={this.handleChange}/>
         <PopupButton text="Privacy Policy" href={this.state.ppHref}/>
         <PopupButton text="Online Form" href={this.state.onlineFormHref}/>
-        <PopupButton text="Email Request" icon={<SendIcon/>} href={this.state.emailHref}/> 
+        <PopupButton text="Email Request" icon={<SendIcon/>} href={this.state.emailHref} loading={true}/> 
   
         <footer className='App-footer'>
           <ScrapeButton />
