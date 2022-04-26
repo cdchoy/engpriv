@@ -19,14 +19,13 @@ export default class Popup extends React.Component {
       ppHref: "",
       onlineFormHref: "",
       emailHref: "",
-      sender: "",
       scraperMail: ""
     };
   }
 
   componentDidMount() {
     this.update();    
-    this.updateID = setInterval(() => this.update(), 3_000);
+    this.updateID = setInterval(() => this.update(), 500);
   }
 
   componentWillUnmount() {
@@ -39,7 +38,6 @@ export default class Popup extends React.Component {
       ppHref: "",
       onlineFormHref: "",
       emailHref: "",
-      sender: "",
       scraperMail: ""
     });
   }
@@ -53,19 +51,18 @@ export default class Popup extends React.Component {
       this.setState({domain: results.domain});
 
       let domainInfo = this.getDomainInfo(results.domain);
-      let scraperMail = new Scraper;
+      // let scraperMail = new Scraper;
       if (domainInfo) {
         this.setState({
           ppHref: domainInfo.privacy_policy,
           onlineFormHref: domainInfo.rtk_form,
-          emailHref: generateEmail(domainInfo.email, this.state.sender)
+          emailHref: generateEmail(domainInfo.email)
         });
       } else {
         this.setState({
           ppHref: "",
           onlineFormHref: "",
-          emailHref: generateEmail(scraperMail.mail, this.state.sender),
-          scraperMail: generateEmail(scraperMail.mail, this.state.sender)
+          emailHref: ""
         });
       }
     });
@@ -83,8 +80,9 @@ export default class Popup extends React.Component {
   }
 
   handleChange(e) {
-    let value = e.target.value;
-    console.log("NAME:", value);
+    let senderName = e.target.value;
+    console.log("NAME:", senderName);
+    chrome.storage.sync.set({senderName});
     // this.setState({sender: value});  //todo: this doesn't work
   }
 
@@ -97,12 +95,11 @@ export default class Popup extends React.Component {
         </header>
   
         {/* {this.state.domain} */}
-        {/* <p className="Gray"><span className="Red">{this.state.domain}</span></p> */}
+        <p className="Gray"><span className="Red">{this.state.domain}</span></p>
         <TextField id="userName" label="Your Name" variant="outlined" sx={{ width: 250, height: 56, mt: 1 }} onChange={this.handleChange}/>
         <PopupButton text="Privacy Policy" href={this.state.ppHref}/>
         <PopupButton text="Online Form" href={this.state.onlineFormHref}/>
         <PopupButton text="Email Request" icon={<SendIcon/>} href={this.state.emailHref}/> 
-        <EmailButton text="Email Request" icon={<SendIcon/>} href={this.state.scraperMail}/> 
   
         <footer className='App-footer'>
           <ScrapeButton/>
