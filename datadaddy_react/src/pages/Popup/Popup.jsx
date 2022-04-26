@@ -6,10 +6,9 @@ import SendIcon from '@mui/icons-material/Send';
 import SettingsIcon from '@mui/icons-material/Settings';
 import PopupButton from './PopupButton.js';
 import generateEmail from './GenerateEmail';
-import ScrapeButton from './Scraper';
+import ScrapeButton, { scrapeEmails } from './Scraper';
 import domainData from '../../assets/data/domainMap.json';
 import EmailButton from './EmailButton';
-import Scraper from './Scraper';
 
 export default class Popup extends React.Component {
   constructor(props) {
@@ -19,7 +18,7 @@ export default class Popup extends React.Component {
       ppHref: "",
       onlineFormHref: "",
       emailHref: "",
-      scraperMail: ""
+      emailLoading: true
     };
   }
 
@@ -38,7 +37,7 @@ export default class Popup extends React.Component {
       ppHref: "",
       onlineFormHref: "",
       emailHref: "",
-      scraperMail: ""
+      emailLoading: true
     });
   }
 
@@ -51,12 +50,12 @@ export default class Popup extends React.Component {
       this.setState({domain: results.domain});
 
       let domainInfo = this.getDomainInfo(results.domain);
-      // let scraperMail = new Scraper;
       if (domainInfo) {
         this.setState({
           ppHref: domainInfo.privacy_policy,
           onlineFormHref: domainInfo.rtk_form,
-          emailHref: generateEmail(domainInfo.email)
+          emailHref: generateEmail(domainInfo.email),
+          emailLoading: false
         });
       } else {
         this.setState({
@@ -66,6 +65,11 @@ export default class Popup extends React.Component {
         });
       }
     });
+
+    if (this.state.emailLoading) {
+      let recipients = scrapeEmails();
+      this.setState({emailHref: generateEmail(recipients)})
+    }
   }
 
   getDomainInfo(domainString) {
@@ -99,7 +103,7 @@ export default class Popup extends React.Component {
         <TextField id="userName" label="Your Name" variant="outlined" sx={{ width: 250, height: 56, mt: 1 }} onChange={this.handleChange}/>
         <PopupButton text="Privacy Policy" href={this.state.ppHref}/>
         <PopupButton text="Online Form" href={this.state.onlineFormHref}/>
-        <PopupButton text="Email Request" icon={<SendIcon/>} href={this.state.emailHref}/> 
+        <PopupButton text="Email Request" icon={<SendIcon/>} href={this.state.emailHref} loading={this.state.emailLoading}/> 
   
         <footer className='App-footer'>
           <ScrapeButton/>

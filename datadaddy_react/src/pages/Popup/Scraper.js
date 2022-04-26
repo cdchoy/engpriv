@@ -8,66 +8,65 @@ const JSSoup = require('jssoup').default;
 // Add this in your component file
 require('react-dom');
 window.React2 = require('react');
-// console.log(window.React1 === window.React2);
 
-class Scraper extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      links: "loading...",
-      mail: "loading...",
-    };
-  }
+// class Scraper extends React.Component {
+//   constructor(props) {
+//     super(props);
+//     this.state = {
+//       links: "loading...",
+//       mail: "loading...",
+//     };
+//   }
 
-  componentDidMount() {
-    this.update();
-    this.updateID = setInterval(() => this.update(), 3_000);
-  }
+//   componentDidMount() {
+//     this.update();
+//     this.updateID = setInterval(() => this.update(), 3_000);
+//   }
 
-  componentWillUnmount() {
-    clearInterval(this.updateID);
-  }
+//   componentWillUnmount() {
+//     clearInterval(this.updateID);
+//   }
 
-  setDefaultState() {
-    this.setState({
-      links: "loading...",
-      mail: "loading...",
-    });
-  }
+//   setDefaultState() {
+//     this.setState({
+//       links: "loading...",
+//       mail: "loading...",
+//     });
+//   }
 
-  update() {
+//   update() {
 
-    this.setState({ links: hyperlinks });
-    this.setState({ mail: emails });
+//     this.setState({ links: hyperlinks });
+//     this.setState({ mail: emails });
 
-    if (flag) {
-      this.setState({
-        links: hyperlinks,
-        mail: generateEmail(emails, this.state.sender),
-      });
-    } else {
-      this.setState({
-        links: "",
-        mail: "",
-      });
-    }
-  }
+//     if (flag) {
+//       this.setState({
+//         links: hyperlinks,
+//         mail: generateEmail(emails, this.state.sender),
+//       });
+//     } else {
+//       this.setState({
+//         links: "",
+//         mail: "",
+//       });
+//     }
+//   }
 
-  render() {
-    return (
-      <div className="Scraper">
-        <PopupButton text="Email Request" icon={<SendIcon />} href={this.state.emailHref} />
-      </div>
-    );
-  }
-}
+//   render() {
+//     return (
+//       <div className="Scraper">
+//         <PopupButton text="Email Request" icon={<SendIcon />} href={this.state.emailHref} />
+//       </div>
+//     );
+//   }
+// }
 
 let emails = new Set();
 let hyperlinks = new Set();
 const emailRegex = /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi;
 const hyperlinksRegex = /^(ftp|http|https):\/\/[^ "]+$/gi;
 let queue = [];
-let flag = false;
+// let flag = false;
 
 // function to return the url of the current tab
 async function getCurrentTabUrl() {
@@ -76,16 +75,16 @@ async function getCurrentTabUrl() {
   return tab.url;
 }
 
-async function scrape() {
-  extractDataBFS();
+export async function scrapeEmails() {
+  return extractDataBFS();
 }
 
 async function extractDataBFS() {
   const url = await getCurrentTabUrl();
   var depth = 0;
   queue.push(url);
-  while (queue.length > 0) {
 
+  while (queue.length > 0) {
     var levelSize = queue.length;
 
     for (var lvl = 0; lvl < levelSize; lvl++) {
@@ -123,21 +122,13 @@ async function extractDataBFS() {
       console.log("Crawl complete")
       console.log(hyperlinks);
       console.log(emails);
-      console.log("fuck");
-
-      flag = true;
-      console.log(this.mail);
-
-      update();
-      this.setState({ mail: generateEmail(emails, "dave") });
-      console.log(this.mail);
-      return;
+      return emails;
     }
   }
 }
 
 const ScrapeButton = () => {
-  return <MuiButton variant="contained" onClick={() => scrape()} sx={{ width: 250, height: 56, alignContent: 'flex-start', mt: 1 }}>Gather Emails</MuiButton>
+  return <MuiButton variant="contained" onClick={() => scrapeEmails()} sx={{ width: 250, height: 56, alignContent: 'flex-start', mt: 1 }}>Gather Emails</MuiButton>
 }
 
 export default ScrapeButton;

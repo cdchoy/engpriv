@@ -7,7 +7,7 @@ const style = { width: 250, height: 56, mt: 2 }
 export default function PopupButton(props) {
   let button;
   if (props.loading) {
-
+    button = (<p>LOADING!</p>);
   } else if (!props.href) {
     button = (<MuiButton sx={style} variant='contained' disabled>{props.text} Not Found</MuiButton>);
   } else {

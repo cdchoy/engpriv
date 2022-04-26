@@ -5,7 +5,6 @@ let sender;
 async function getSender() {
     let p = new Promise(function(resolve, reject){
         chrome.storage.sync.get('senderName', (results) => {
-            console.log("SENDER:", results.senderName);
             if (!results.senderName) {
                 reject("[[Your Name Here]]");
             }
@@ -16,7 +15,6 @@ async function getSender() {
 }
 
 export default function generateEmail(recipients) {
-    console.log("recipients are " + recipients);
     if (!recipients) return null;
     const urlprefix = "https://mail.google.com/mail/?view=cm&fs=1";
     const emailTo = "&to=" + recipients;
