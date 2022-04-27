@@ -13,7 +13,6 @@ export default function PopupButton(props) {
         sx={style} 
         variant='outlined' 
         loading
-        loadingPosition="end"
       >
         {props.text}
       </LoadingButton>);

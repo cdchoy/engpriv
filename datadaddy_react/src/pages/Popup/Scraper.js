@@ -66,7 +66,33 @@ let hyperlinks = new Set();
 const emailRegex = /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi;
 const hyperlinksRegex = /^(ftp|http|https):\/\/[^ "]+$/gi;
 let queue = [];
-// let flag = false;
+
+export function scrapeEmails() {
+  awaitScrape();
+  let s = new Set(['hello', 'world']);
+  console.log("basic set", s);
+  console.log("arrFromSet", Array.from(s).toString());
+
+  console.log("EMAILS:", emails);  
+  console.log("HEREHERE:", Array.from(emails));
+  console.log("HEREHERE2:", [...emails]);
+  emails.forEach(v => console.log(v));
+  var ret = "";
+  // emails.forEach((value) => {
+  //   console.log("setforeach", value);
+  // })
+  // console.log("FOO:", ret);
+  return ret;
+}
+
+async function awaitScrape() {
+  let p = new Promise(function(resolve, reject){
+    extractDataBFS().then(() => {
+      resolve();
+    });
+  });
+  await p;
+}
 
 // function to return the url of the current tab
 async function getCurrentTabUrl() {
@@ -75,24 +101,28 @@ async function getCurrentTabUrl() {
   return tab.url;
 }
 
-export async function scrapeEmails() {
-  return extractDataBFS();
-}
-
 async function extractDataBFS() {
   const url = await getCurrentTabUrl();
   var depth = 0;
   queue.push(url);
 
   while (queue.length > 0) {
+    console.log("CRAWLING...")
     var levelSize = queue.length;
 
     for (var lvl = 0; lvl < levelSize; lvl++) {
       var currLink = queue[0];
+      if (currLink === "chrome://extensions/") { return; } // squash irritating error message
       queue.shift();
-      var rootBfs = await fetch(`${currLink}`)
-        .then(resBfs => resBfs.text())
-        .then(bodyBfs => HTMLParser.parse(bodyBfs));
+      var rootBfs = [];
+      try {
+        rootBfs = await fetch(`${currLink}`)
+          .then(resBfs => resBfs.text())
+          .then(bodyBfs => HTMLParser.parse(bodyBfs));
+      } catch (error) {
+        return rootBfs;
+      }
+
       const soupBfs = new JSSoup(rootBfs);
       var linksBfs = soupBfs.findAll('a');
       for (let i in linksBfs) {
@@ -100,8 +130,8 @@ async function extractDataBFS() {
           // Email Regex
           let mailAddr = linksBfs[i].attrs.href.match(emailRegex);
           if (mailAddr != null) {
-            if (emails.has(mailAddr) === false) {
-              emails.add(mailAddr);
+            if (emails.has(mailAddr.toString()) === false) {
+              emails.add(mailAddr.toString());
             }
           }
 
@@ -117,12 +147,11 @@ async function extractDataBFS() {
       }
     }
     depth++;
-    console.log(depth, hyperlinks);
+    console.log("DEPTH", depth, hyperlinks);
     if (depth > 2 || emails.size > 10 || hyperlinks.size > 100) {
-      console.log("Crawl complete")
-      console.log(hyperlinks);
-      console.log(emails);
-      return emails;
+      console.log("Crawl complete!!")
+      console.log("Hyperlinks", hyperlinks);
+      console.log("Emails", emails);
     }
   }
 }

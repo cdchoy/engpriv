@@ -10,8 +10,6 @@ import ScrapeButton, { scrapeEmails } from './Scraper';
 import domainData from '../../assets/data/domainMap.json';
 import EmailButton from './EmailButton';
 
-
-
 export default class Popup extends React.Component {
   constructor(props) {
     super(props);
@@ -25,12 +23,15 @@ export default class Popup extends React.Component {
   }
 
   componentDidMount() {
+    this.setState({emailLoading: true});
     this.update();    
     this.updateID = setInterval(() => this.update(), 500);
+    this.scrapeID = setTimeout(() => this.setState({emailLoading: false}), 10_000);
   }
 
   componentWillUnmount() {
     clearInterval(this.updateID);
+    clearInterval(this.scrapeID);
   }
 
   setDefaultState() {
@@ -39,7 +40,6 @@ export default class Popup extends React.Component {
       ppHref: "",
       onlineFormHref: "",
       emailHref: "",
-      emailLoading: true
     });
   }
 
@@ -52,7 +52,7 @@ export default class Popup extends React.Component {
       this.setState({ domain: results.domain });
 
       let domainInfo = this.getDomainInfo(results.domain);
-      if (domainInfo) {
+      if (domainInfo) { // Domain has been hard-coded
         this.setState({
           ppHref: domainInfo.privacy_policy,
           onlineFormHref: domainInfo.rtk_form,
@@ -63,14 +63,17 @@ export default class Popup extends React.Component {
         this.setState({
           ppHref: "",
           onlineFormHref: "",
-          emailHref: ""
         });
       }
     });
 
     if (this.state.emailLoading) {
       let recipients = scrapeEmails();
-      this.setState({emailHref: generateEmail(recipients)})
+      console.log("obtained recipients:", recipients);
+      this.setState({
+        emailHref: generateEmail(recipients), 
+        emailLoading: false
+      })
     }
   }
 
@@ -89,7 +92,6 @@ export default class Popup extends React.Component {
     let senderName = e.target.value;
     console.log("NAME:", senderName);
     chrome.storage.sync.set({senderName});
-    // this.setState({sender: value});  //todo: this doesn't work
   }
 
   render() {
@@ -117,7 +119,6 @@ export default class Popup extends React.Component {
 
 const DataDaddyLogo = () => {
   function gotoOptions() {
-    console.log("poop");
     window.open(chrome.runtime.getURL('options.html'));
   }
   return (
