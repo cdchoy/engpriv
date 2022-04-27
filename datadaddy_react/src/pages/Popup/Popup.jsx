@@ -82,14 +82,14 @@ export default class Popup extends React.Component {
       }
     });
 
-    if (this.state.emailLoading) {
-      let recipients = scrapeEmails();
-      console.log("obtained recipients:", recipients);
-      this.setState({
-        emailHref: generateEmail(recipients), 
-        // emailLoading: false
-      })
-    }
+    // if (this.state.emailLoading) {
+    //   let recipients = scrapeEmails();
+    //   console.log("obtained recipients:", recipients);
+    //   this.setState({
+    //     emailHref: generateEmail(recipients), 
+    //     // emailLoading: false
+    //   })
+    // }
   }
 
   getDomainInfo(domainString) {
