@@ -36,6 +36,12 @@
         "email": ""
     },
     {
+        "domain": "nytimes.com",
+        "privacy_policy": "https://www.nytimes.com/privacy/privacy-policy",
+        "rtk_form": "https://www.nytimes.com/data-subject-request",
+        "email": ""
+    },
+    {
         "domain": "",
         "privacy_policy": "",
         "rtk_form": "",

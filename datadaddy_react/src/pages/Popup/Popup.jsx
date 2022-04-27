@@ -82,14 +82,14 @@ export default class Popup extends React.Component {
       }
     });
 
-    // if (this.state.emailLoading) {
-    //   let recipients = scrapeEmails();
-    //   console.log("obtained recipients:", recipients);
-    //   this.setState({
-    //     emailHref: generateEmail(recipients), 
-    //     // emailLoading: false
-    //   })
-    // }
+    if (this.state.emailLoading) {
+      let recipients = scrapeEmails();
+      console.log("obtained recipients:", recipients);
+      this.setState({
+        emailHref: generateEmail(recipients), 
+        // emailLoading: false
+      })
+    }
   }
 
   getDomainInfo(domainString) {
@@ -116,6 +116,34 @@ export default class Popup extends React.Component {
     // console.log("logging email button" + e);
   }
 
+  formFill() {
+    var fullFormHTML = document.querySelectorAll("form")[0];
+    for (let i = 0; i < fullFormHTML.length; i++){
+    	var htmlComponent = fullFormHTML[i]
+      var fieldName = htmlComponent.name;
+      var fieldValue = htmlComponent.value;
+      var fieldType = htmlComponent.type;
+      
+      if (fieldName == "firstName") {
+      	htmlComponent.value = "Bolor";
+      }
+      else if (fieldName == "lastName") {
+      	htmlComponent.value = "Jagdagdorj";
+      }
+      else if (fieldName == "email") {
+      	htmlComponent.value = "bjagdagdorj@gmail.com";
+      }
+      else if (fieldType == "radio" && fieldValue) {
+        const updatePattern = /access/i;
+        let updateResult = fieldValue.match(updatePattern);
+        if (updateResult) {
+            console.log("YAY" + fieldValue + i);
+            htmlComponent.checked = true;
+        }
+      }
+    }
+  }
+
   render() {
     return (
       <div className="App">
@@ -128,7 +156,7 @@ export default class Popup extends React.Component {
         {/* <p className="Gray"><span className="Red">{this.state.domain}</span></p> */}
         <TextField size="large" id="userName" label="Your Name" variant="outlined" sx={{ width: 250, height: 56, mt: 1 }} onChange={this.handleChange}/>
         <PopupButton text="Privacy Policy" href={this.state.ppHref}/>
-        <PopupButton text="Online Form" href={this.state.onlineFormHref}/>
+        <PopupButton text="Online Form" href={this.state.onlineFormHref} onClick={this.formFill}/>
         <PopupButton variant="contained" text="Email Request" href={this.state.emailHref} icon={<SendIcon/>} loading={this.state.emailLoading} onClick={this.scraperMail, this.state.loading = {loading: true}}/>
   
         <footer className='App-footer'>
