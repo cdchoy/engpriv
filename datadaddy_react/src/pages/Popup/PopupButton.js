@@ -11,12 +11,15 @@ export default function PopupButton(props) {
   if (props.loading) {
     button = (
       <LoadingButton 
+      size = "large"
         sx={style} 
-        variant='outlined'
+        variant='contained'
         text="Please Wait..."
+        loadingPosition="end"
+        
         loading
       >
-        {props.text}
+        Please Wait...
       </LoadingButton>);
   }
   // else if (!props.href) {
@@ -25,6 +28,8 @@ export default function PopupButton(props) {
   else {
     button = (
       <MuiButton 
+      size = "large"
+
         sx={style} 
         variant='outlined' 
         endIcon={props.icon}
