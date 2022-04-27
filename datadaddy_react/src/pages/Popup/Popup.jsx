@@ -10,6 +10,12 @@ import ScrapeButton, { scrapeEmails } from './Scraper';
 import domainData from '../../assets/data/domainMap.json';
 import EmailButton from './EmailButton';
 
+async function getCurrentTabUrl() {
+  let queryOptions = { active: true, currentWindow: true };
+  let [tab] = await chrome.tabs.query(queryOptions);
+  return tab.url;
+}
+
 export default class Popup extends React.Component {
   constructor(props) {
     super(props);
@@ -18,15 +24,16 @@ export default class Popup extends React.Component {
       ppHref: "",
       onlineFormHref: "",
       emailHref: "",
-      emailLoading: true
+      emailLoading: true,
+      loading: false
     };
   }
 
   componentDidMount() {
     this.setState({emailLoading: true});
-    this.update();    
+    this.update();
     this.updateID = setInterval(() => this.update(), 500);
-    this.scrapeID = setTimeout(() => this.setState({emailLoading: false}), 10_000);
+    this.scrapeID = setTimeout(() => this.setState({emailLoading: false}), 20_000);
   }
 
   componentWillUnmount() {
@@ -40,6 +47,7 @@ export default class Popup extends React.Component {
       ppHref: "",
       onlineFormHref: "",
       emailHref: "",
+      loading: false
     });
   }
 
@@ -59,8 +67,15 @@ export default class Popup extends React.Component {
           emailHref: generateEmail(domainInfo.email),
           emailLoading: false
         });
+      } else if (!loading) {
+        this.setState({
+          ppHref: "",
+          onlineFormHref: "",
+          emailHref: ""
+        })
       } else {
         this.setState({
+          emailLoading: true,
           ppHref: "",
           onlineFormHref: "",
         });
@@ -72,7 +87,7 @@ export default class Popup extends React.Component {
       console.log("obtained recipients:", recipients);
       this.setState({
         emailHref: generateEmail(recipients), 
-        emailLoading: false
+        // emailLoading: false
       })
     }
   }
@@ -94,6 +109,13 @@ export default class Popup extends React.Component {
     chrome.storage.sync.set({senderName});
   }
 
+  scraperMail(button) {
+    button.setState( loading );
+    console.log("in scrapermail");
+    // e.setState( {loading} );
+    // console.log("logging email button" + e);
+  }
+
   render() {
     return (
       <div className="App">
@@ -103,14 +125,13 @@ export default class Popup extends React.Component {
         </header>
 
         {/* {this.state.domain} */}
-        <p className="Gray"><span className="Red">{this.state.domain}</span></p>
+        {/* <p className="Gray"><span className="Red">{this.state.domain}</span></p> */}
         <TextField id="userName" label="Your Name" variant="outlined" sx={{ width: 250, height: 56, mt: 1 }} onChange={this.handleChange}/>
         <PopupButton text="Privacy Policy" href={this.state.ppHref}/>
         <PopupButton text="Online Form" href={this.state.onlineFormHref}/>
-        <PopupButton text="Email Request" icon={<SendIcon/>} href={this.state.emailHref} loading={this.state.emailLoading}/> 
+        <PopupButton variant="contained" text="Email Request" href={this.state.emailHref} icon={<SendIcon/>} loading={this.state.emailLoading} onClick={this.scraperMail, this.state.loading = {loading: true}}/>
   
         <footer className='App-footer'>
-          <ScrapeButton />
         </footer>
       </div>
     );
