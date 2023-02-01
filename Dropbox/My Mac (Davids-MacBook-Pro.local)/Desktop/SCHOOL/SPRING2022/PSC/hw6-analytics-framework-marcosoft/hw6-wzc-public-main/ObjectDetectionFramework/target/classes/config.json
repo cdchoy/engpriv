@@ -1,0 +1,25 @@
+{
+    "Frame Capture Plugin":
+    {
+        "num": 50,
+        "videoPath": "demo_video/demo.mov",
+        "picturePath": "demo_video/"
+    },
+
+    "Memes Plugin": {
+        "num": 10
+    },
+
+    "Tweets Plugin": {
+        "num": 50
+    },
+
+    "Unsplash Data Plugin": {
+        "num": 20
+    },
+
+    "Heat Map Plugin": {
+        "num": 6,
+        "objects": ["Dog", "Water", "Moon"]
+    }
+}

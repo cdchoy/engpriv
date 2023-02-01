@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>App.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ObjectDetectionFramework</a> &gt; <a href="index.source.html" class="el_package">org.objectdetection</a> &gt; <span class="el_source">App.java</span></div><h1>App.java</h1><pre class="source lang-java linenums">package org.objectdetection;
+
+import fi.iki.elonen.NanoHTTPD;
+import org.objectdetection.framework.DataPlugin;
+import org.objectdetection.framework.Framework;
+import org.objectdetection.framework.VisualizationPlugin;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.ServiceLoader;
+
+public class App extends NanoHTTPD {
+
+<span class="nc" id="L16">	private final Object lock = new Object();</span>
+	private List&lt;DataPlugin&gt; dataPlugins;
+	private List&lt;VisualizationPlugin&gt; visualizationPlugins;
+	private DataPlugin dataPlugin;
+	private VisualizationPlugin visualizationPlugin;
+	private String state;
+
+	/**
+	 * Start the server.
+	 * @throws IOException
+	 */
+	public App() throws IOException {
+<span class="nc" id="L28">		super(8080);</span>
+
+<span class="nc" id="L30">		dataPlugins = loadDataPlugin();</span>
+<span class="nc" id="L31">		visualizationPlugins = loadVisualizationPlugin();</span>
+<span class="nc" id="L32">		state = &quot;chooseDataPlugin&quot;;</span>
+
+		// Start the server.
+<span class="nc" id="L35">		start(NanoHTTPD.SOCKET_READ_TIMEOUT, false);</span>
+<span class="nc" id="L36">		System.out.println(&quot;The server has been started successfully.\n&quot;);</span>
+<span class="nc" id="L37">	}</span>
+
+	public static void main(String[] args) {
+		try {
+<span class="nc" id="L41">			new App();</span>
+<span class="nc" id="L42">		} catch (IOException e) {</span>
+<span class="nc" id="L43">			System.err.println(&quot;An Error occurred when starting the server: &quot; + e + &quot;\n&quot;);</span>
+<span class="nc" id="L44">		}</span>
+<span class="nc" id="L45">	}</span>
+
+	/**
+	 * Get information from the frontend, process in the backend
+	 * and send response to frontend.
+	 * @param session A session.
+	 * @return A response to the frontend.
+	 */
+	@Override
+	public Response serve(IHTTPSession session) {
+<span class="nc" id="L55">		String uri = session.getUri();</span>
+<span class="nc" id="L56">		Map&lt;String, String&gt; params = session.getParms();</span>
+
+<span class="nc bnc" id="L58" title="All 4 branches missed.">		switch (uri) {</span>
+			case &quot;/click&quot;:
+<span class="nc bnc" id="L60" title="All 2 branches missed.">				if (state.equals(&quot;chooseDataPlugin&quot;)) {</span>
+<span class="nc" id="L61">					synchronized (lock) {</span>
+<span class="nc" id="L62">						dataPlugin = dataPlugins.get(Integer.parseInt(params.get(&quot;index&quot;)));</span>
+<span class="nc" id="L63">						state = &quot;chooseVisualizationPlugin&quot;;</span>
+<span class="nc" id="L64">					}</span>
+<span class="nc bnc" id="L65" title="All 2 branches missed.">				} else if (state.equals(&quot;chooseVisualizationPlugin&quot;)) {</span>
+<span class="nc" id="L66">					synchronized (lock) {</span>
+<span class="nc" id="L67">						visualizationPlugin = visualizationPlugins.get(Integer.parseInt(params.get(&quot;index&quot;)));</span>
+<span class="nc" id="L68">						state = &quot;busy&quot;;</span>
+<span class="nc" id="L69">					}</span>
+<span class="nc" id="L70">					boolean error = false;</span>
+<span class="nc" id="L71">					Framework framework = new Framework(dataPlugin, visualizationPlugin);</span>
+					try {
+<span class="nc" id="L73">						framework.runFramework();</span>
+<span class="nc" id="L74">					} catch (RuntimeException e) {</span>
+<span class="nc" id="L75">						System.out.println(e);</span>
+<span class="nc" id="L76">						error = true;</span>
+<span class="nc" id="L77">					}</span>
+<span class="nc" id="L78">					synchronized (lock) {</span>
+<span class="nc bnc" id="L79" title="All 2 branches missed.">						if (error) {</span>
+<span class="nc" id="L80">							state = &quot;error&quot;;</span>
+						} else {
+<span class="nc" id="L82">							state = &quot;finish&quot;;</span>
+						}
+<span class="nc" id="L84">					}</span>
+<span class="nc" id="L85">				}</span>
+				break;
+			case &quot;/new&quot;:
+<span class="nc" id="L88">				synchronized (lock) {</span>
+<span class="nc" id="L89">					state = &quot;chooseDataPlugin&quot;;</span>
+<span class="nc" id="L90">				}</span>
+<span class="nc" id="L91">				break;</span>
+			case &quot;/fetch&quot;:
+<span class="nc" id="L93">				break;</span>
+			default:
+				// Unknown request.
+<span class="nc" id="L96">				System.out.println(&quot;Unknown request:&quot; + uri);</span>
+
+		}
+<span class="nc" id="L99">		return newFixedLengthResponse(generateInfo());</span>
+	}
+
+	private List&lt;DataPlugin&gt; loadDataPlugin(){
+<span class="nc" id="L103">		ServiceLoader&lt;DataPlugin&gt; plugins = ServiceLoader.load(DataPlugin.class);</span>
+<span class="nc" id="L104">		List&lt;DataPlugin&gt; result = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L105" title="All 2 branches missed.">		for (DataPlugin plugin : plugins) {</span>
+<span class="nc" id="L106">			result.add(plugin);</span>
+<span class="nc" id="L107">		}</span>
+<span class="nc" id="L108">		return result;</span>
+	}
+
+	private List&lt;VisualizationPlugin&gt;  loadVisualizationPlugin() {
+<span class="nc" id="L112">		ServiceLoader&lt;VisualizationPlugin&gt; plugins = ServiceLoader.load(VisualizationPlugin.class);</span>
+<span class="nc" id="L113">		List&lt;VisualizationPlugin&gt; result = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L114" title="All 2 branches missed.">		for (VisualizationPlugin plugin : plugins) {</span>
+<span class="nc" id="L115">			result.add(plugin);</span>
+<span class="nc" id="L116">		}</span>
+<span class="nc" id="L117">		return result;</span>
+	}
+
+	private String generateInfo() {
+<span class="nc" id="L121">		StringBuilder pluginNames = new StringBuilder(&quot;[&quot;);</span>
+<span class="nc" id="L122">		synchronized (lock) {</span>
+<span class="nc bnc" id="L123" title="All 2 branches missed.">			if (state.equals(&quot;chooseDataPlugin&quot;)) {</span>
+<span class="nc bnc" id="L124" title="All 2 branches missed.">				for (DataPlugin plugin : dataPlugins) {</span>
+<span class="nc bnc" id="L125" title="All 2 branches missed.">					if (!pluginNames.toString().equals(&quot;[&quot;)) {</span>
+<span class="nc" id="L126">						pluginNames.append(&quot;,&quot;);</span>
+					}
+<span class="nc" id="L128">					pluginNames.append(&quot;\&quot;&quot;).append(plugin.getPluginName()).append(&quot;\&quot;&quot;);</span>
+<span class="nc" id="L129">				}</span>
+<span class="nc" id="L130">				pluginNames.append(&quot;]&quot;);</span>
+<span class="nc bnc" id="L131" title="All 2 branches missed.">			} else if (state.equals(&quot;chooseVisualizationPlugin&quot;)) {</span>
+<span class="nc bnc" id="L132" title="All 2 branches missed.">				for (VisualizationPlugin plugin : visualizationPlugins) {</span>
+<span class="nc bnc" id="L133" title="All 2 branches missed.">					if (!pluginNames.toString().equals(&quot;[&quot;)) {</span>
+<span class="nc" id="L134">						pluginNames.append(&quot;,&quot;);</span>
+					}
+<span class="nc" id="L136">					pluginNames.append(&quot;\&quot;&quot;).append(plugin.getPluginName()).append(&quot;\&quot;&quot;);</span>
+<span class="nc" id="L137">				}</span>
+<span class="nc" id="L138">				pluginNames.append(&quot;]&quot;);</span>
+			} else {
+<span class="nc" id="L140">				pluginNames = new StringBuilder(&quot;[]&quot;);</span>
+			}
+<span class="nc" id="L142">		}</span>
+
+<span class="nc" id="L144">		return &quot;{\&quot;pluginNames\&quot;: &quot; + pluginNames + &quot;,&quot; +</span>
+				&quot; \&quot;state\&quot;: &quot; + &quot;\&quot;&quot; + state + &quot;\&quot;&quot; + &quot;}&quot;;
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

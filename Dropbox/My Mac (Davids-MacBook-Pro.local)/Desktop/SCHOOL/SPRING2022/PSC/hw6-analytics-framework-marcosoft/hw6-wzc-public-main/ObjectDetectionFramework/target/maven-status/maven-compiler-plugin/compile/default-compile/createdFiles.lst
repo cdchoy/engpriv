@@ -1,0 +1,13 @@
+org/objectdetection/plugin/visualization/PieChartVisualization.class
+org/objectdetection/plugin/data/TwitterData.class
+org/objectdetection/App.class
+org/objectdetection/framework/DetectionData.class
+org/objectdetection/plugin/data/FrameCaptureData.class
+org/objectdetection/framework/Framework.class
+org/objectdetection/plugin/data/UnsplashData.class
+org/objectdetection/framework/DataPlugin.class
+org/objectdetection/framework/ImageSource.class
+org/objectdetection/plugin/visualization/BarChartVisualization.class
+org/objectdetection/framework/VisualizationPlugin.class
+org/objectdetection/plugin/data/MemesData.class
+org/objectdetection/plugin/visualization/HeatMapVisualization.class

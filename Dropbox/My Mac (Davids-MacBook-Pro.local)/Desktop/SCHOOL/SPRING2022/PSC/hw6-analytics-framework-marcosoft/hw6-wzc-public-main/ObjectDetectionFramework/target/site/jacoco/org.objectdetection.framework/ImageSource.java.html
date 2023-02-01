@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ImageSource.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ObjectDetectionFramework</a> &gt; <a href="index.source.html" class="el_package">org.objectdetection.framework</a> &gt; <span class="el_source">ImageSource.java</span></div><h1>ImageSource.java</h1><pre class="source lang-java linenums">package org.objectdetection.framework;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class ImageSource {
+	private List&lt;String&gt; types;
+	private List&lt;String&gt; locations;
+
+	/**
+	 * The constructor of ImageSource.
+	 */
+<span class="fc" id="L13">	public ImageSource() {</span>
+<span class="fc" id="L14">		types = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L15">		locations = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L16">	}</span>
+
+	/**
+	 * Get the number of images.
+	 * @return The number of images.
+	 */
+	public int size() {
+<span class="fc" id="L23">		return types.size();</span>
+	}
+
+	/**
+	 * Get the type of the way to add the image.
+	 * @param index The index of the image.
+	 * @return The type of the way to add the image.
+	 */
+	public String getType(int index) {
+<span class="fc" id="L32">		return types.get(index);</span>
+	}
+
+	/**
+	 * Get the location of the image.
+	 * @param index The index of the image.
+	 * @return The location of the image.
+	 */
+	public String getLocation(int index) {
+<span class="fc" id="L41">		return locations.get(index);</span>
+	}
+
+	/**
+	 * Add an image by url.
+	 * @param url The url of the image.
+	 */
+	public void addImageByURL(String url) {
+<span class="fc" id="L49">		types.add(&quot;url&quot;);</span>
+<span class="fc" id="L50">		locations.add(url);</span>
+<span class="fc" id="L51">	}</span>
+
+	/**
+	 * Add an image by path.
+	 * @param path The path of the image.
+	 */
+	public void addImageByPath(String path) {
+<span class="fc" id="L58">		types.add(&quot;path&quot;);</span>
+<span class="fc" id="L59">		locations.add(path);</span>
+<span class="fc" id="L60">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

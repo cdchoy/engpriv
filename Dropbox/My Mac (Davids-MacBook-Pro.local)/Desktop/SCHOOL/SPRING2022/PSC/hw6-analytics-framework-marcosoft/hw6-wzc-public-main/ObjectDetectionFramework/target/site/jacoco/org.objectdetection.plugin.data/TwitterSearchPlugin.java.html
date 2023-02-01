@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TwitterSearchPlugin.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ObjectDetectionFramework</a> &gt; <a href="index.source.html" class="el_package">org.objectdetection.plugin.data</a> &gt; <span class="el_source">TwitterSearchPlugin.java</span></div><h1>TwitterSearchPlugin.java</h1><pre class="source lang-java linenums">package org.objectdetection.plugin.data;
+
+import org.json.simple.JSONObject;
+import org.objectdetection.framework.DataPlugin;
+import org.objectdetection.framework.ImageSource;
+import twitter4j.*;
+import twitter4j.conf.ConfigurationBuilder;
+
+import java.util.ArrayList;
+
+public class TwitterSearchPlugin implements DataPlugin {
+    private int num;
+    private final Twitter twitter;
+
+<span class="nc" id="L15">    public TwitterSearchPlugin() {</span>
+<span class="nc" id="L16">        twitter = getConfiguration();</span>
+<span class="nc" id="L17">    }</span>
+
+    /**
+     * Get the name of the plugin.
+     * @return The name of the plugin.
+     */
+    public String getPluginName() {
+<span class="nc" id="L24">        return &quot;Tweets Plugin&quot;;</span>
+    }
+
+    /**
+     * Get video path and picture path from the json file.
+     * @param args A json object that contains the arguments of the plugin.
+     */
+    public void initialize(JSONObject args) {
+<span class="nc" id="L32">        num = (int)((long) args.get(&quot;num&quot;));</span>
+<span class="nc" id="L33">    }</span>
+
+    @Override
+    public ImageSource inputImages() {
+<span class="nc" id="L37">        ImageSource source = new ImageSource();</span>
+<span class="nc" id="L38">        Query query = new Query(&quot;war&quot; + &quot;filter:images -filter:retweets -filter:replies&quot;);</span>
+<span class="nc" id="L39">        query.setCount(num);</span>
+<span class="nc" id="L40">        query.setLocale(&quot;en&quot;);</span>
+<span class="nc" id="L41">        query.setLang(&quot;en&quot;);</span>
+        QueryResult queryResult;
+        try {
+<span class="nc" id="L44">            queryResult = twitter.search(query);</span>
+<span class="nc" id="L45">        } catch (TwitterException e) {</span>
+<span class="nc" id="L46">            e.printStackTrace();</span>
+<span class="nc" id="L47">            return source;</span>
+<span class="nc" id="L48">        }</span>
+<span class="nc" id="L49">        var contentStatus = queryResult.getTweets();</span>
+<span class="nc" id="L50">        var contents = new ArrayList&lt;String&gt;();</span>
+<span class="nc bnc" id="L51" title="All 2 branches missed.">        for (var status : contentStatus) {</span>
+<span class="nc" id="L52">            MediaEntity[] media = status.getMediaEntities(); //get the media entities from the status</span>
+<span class="nc bnc" id="L53" title="All 2 branches missed.">            for(MediaEntity m : media){ //search trough your entities</span>
+<span class="nc" id="L54">                System.out.println(m.getMediaURL()); //get your url!</span>
+<span class="nc" id="L55">                source.addImageByURL(m.getMediaURL());</span>
+            }
+<span class="nc" id="L57">            contents.add(status.getText());</span>
+<span class="nc" id="L58">        }</span>
+<span class="nc" id="L59">        return source;</span>
+    }
+
+    /**
+     * Get twitter configuration instance.
+     * @return instance of twitter factory object
+     */
+    private Twitter getConfiguration() {
+<span class="nc" id="L67">        ConfigurationBuilder cb = new ConfigurationBuilder();</span>
+<span class="nc" id="L68">        cb.setDebugEnabled(true).setOAuthConsumerKey(&quot;os0OxOS8m9NFf00WXJ0KmoFbE&quot;)</span>
+<span class="nc" id="L69">                .setOAuthConsumerSecret(&quot;20zb06akYocRuI1EGodDJy280PthIqCMIAMYEHjIgzNkX3Axz0&quot;)</span>
+<span class="nc" id="L70">                .setOAuthAccessToken(&quot;1332068880567726089-JmTbNjU4aGaH8OvSBbuxQGgpu515Gq&quot;)</span>
+<span class="nc" id="L71">                .setOAuthAccessTokenSecret(&quot;n7LrlIAQRJkVyJ5b4CstUluHFfKR9DnvOGcFwT6xu7Ahd&quot;);</span>
+<span class="nc" id="L72">        TwitterFactory tf = new TwitterFactory(cb.build());</span>
+<span class="nc" id="L73">        return tf.getInstance();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

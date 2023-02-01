@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="8.45">
+<file name="/Users/davidzagardo/Dropbox/My Mac (Davids-MacBook-Pro.local)/Desktop/SCHOOL/SPRING2022/PSC/hw6-analytics-framework-marcosoft/hw6-wzc-public-main/ObjectDetectionFramework/src/main/java/org/objectdetection/framework/Framework.java">
+</file>
+<file name="/Users/davidzagardo/Dropbox/My Mac (Davids-MacBook-Pro.local)/Desktop/SCHOOL/SPRING2022/PSC/hw6-analytics-framework-marcosoft/hw6-wzc-public-main/ObjectDetectionFramework/src/main/java/org/objectdetection/plugin/visualization/BarChartVisualization.java">
+</file>
+<file name="/Users/davidzagardo/Dropbox/My Mac (Davids-MacBook-Pro.local)/Desktop/SCHOOL/SPRING2022/PSC/hw6-analytics-framework-marcosoft/hw6-wzc-public-main/ObjectDetectionFramework/src/main/java/org/objectdetection/plugin/visualization/HeatMapVisualization.java">
+</file>
+<file name="/Users/davidzagardo/Dropbox/My Mac (Davids-MacBook-Pro.local)/Desktop/SCHOOL/SPRING2022/PSC/hw6-analytics-framework-marcosoft/hw6-wzc-public-main/ObjectDetectionFramework/src/main/java/org/objectdetection/plugin/data/MemesData.java">
+</file>
+<file name="/Users/davidzagardo/Dropbox/My Mac (Davids-MacBook-Pro.local)/Desktop/SCHOOL/SPRING2022/PSC/hw6-analytics-framework-marcosoft/hw6-wzc-public-main/ObjectDetectionFramework/src/main/java/org/objectdetection/plugin/data/FrameCaptureData.java">
+</file>
+</checkstyle>

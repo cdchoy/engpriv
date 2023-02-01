@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DetectionData.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ObjectDetectionFramework</a> &gt; <a href="index.source.html" class="el_package">org.objectdetection.framework</a> &gt; <span class="el_source">DetectionData.java</span></div><h1>DetectionData.java</h1><pre class="source lang-java linenums">package org.objectdetection.framework;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+public class DetectionData {
+	private List&lt;Map&lt;String, Float&gt;&gt; detectionResult;
+
+	/**
+	 * Initialize the detection data.
+	 * @param detectionResult A {@link Map} object that contains the detection results from the web api.
+	 */
+<span class="fc" id="L15">	public DetectionData(List&lt;Map&lt;String, Float&gt;&gt; detectionResult) {</span>
+<span class="fc" id="L16">		this.detectionResult = detectionResult;</span>
+<span class="fc" id="L17">	}</span>
+
+	/**
+	 * Get the number of the images extracted by the data plugin.
+	 * @return The number of the images.
+	 */
+	public int getImageNumber() {
+<span class="nc" id="L24">		return detectionResult.size();</span>
+	}
+
+	/**
+	 * Get the detection result of a specified image.
+	 * @param index The index of the image.
+	 * @return A {@link Map} object that contains the detection result of the image.
+	 * The key of the map is the name of the object in the image, the value is the probability of the detection.
+	 */
+	public Map&lt;String, Float&gt; getDetectionResult(int index) {
+<span class="nc" id="L34">		return detectionResult.get(index);</span>
+	}
+
+	/**
+	 * Search for a specified object in the detection result.
+	 * @param objectName the name of the object.
+	 * @return A {@link List} object which contains the indexes of the images that have the object in it.
+	 */
+	public List&lt;Integer&gt; searchObject(String objectName) {
+<span class="fc" id="L43">		List&lt;Integer&gt; indexes = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L44" title="All 2 branches covered.">		for (int i = 0; i &lt; detectionResult.size(); i++) {</span>
+<span class="pc bpc" id="L45" title="1 of 2 branches missed.">			if (detectionResult.get(i).containsKey(objectName)) {</span>
+<span class="fc" id="L46">				indexes.add(i);</span>
+			}
+		}
+<span class="fc" id="L49">		return indexes;</span>
+	}
+
+	/**
+	 * Get the most frequent object in the image set.
+	 * @return The name of the most frequent object in the image set.
+	 */
+	public String getMostFrequentObject() {
+<span class="fc" id="L57">		Map&lt;String, Integer&gt; overview = overviewObjects();</span>
+<span class="fc" id="L58">		String object = &quot;&quot;;</span>
+<span class="fc" id="L59">		int maximumCount = 0;</span>
+<span class="fc bfc" id="L60" title="All 2 branches covered.">		for (String objectName : overview.keySet()) {</span>
+<span class="fc bfc" id="L61" title="All 2 branches covered.">			if (overview.get(objectName) &gt; maximumCount) {</span>
+<span class="fc" id="L62">				maximumCount = overview.get(objectName);</span>
+<span class="fc" id="L63">				object = objectName;</span>
+			}
+<span class="fc" id="L65">		}</span>
+<span class="fc" id="L66">		return object;</span>
+	}
+
+	/**
+	 * Get an overview of all objects detected in the image set.
+	 * The overview shows the name of the objects detected in the image set and their frequency.
+	 * @return A {@link Map} object that contains the overview information of the images.
+	 * The key is the name of the object and the value is the frequency of that object appears in the image set.
+	 */
+	public Map&lt;String, Integer&gt; overviewObjects() {
+<span class="fc" id="L76">		HashMap&lt;String, Integer&gt; overviewData = new HashMap&lt;&gt;();</span>
+<span class="fc bfc" id="L77" title="All 2 branches covered.">		for (int i = 0; i &lt; detectionResult.size(); i++) {</span>
+<span class="fc bfc" id="L78" title="All 2 branches covered.">			for (String objectName : detectionResult.get(i).keySet()) {</span>
+<span class="fc bfc" id="L79" title="All 2 branches covered.">				if (overviewData.containsKey(objectName)) {</span>
+<span class="fc" id="L80">					overviewData.replace(objectName, overviewData.get(objectName) + 1);</span>
+				} else {
+<span class="fc" id="L82">					overviewData.put(objectName, 1);</span>
+				}
+<span class="fc" id="L84">			}</span>
+		}
+<span class="fc" id="L86">		return overviewData;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

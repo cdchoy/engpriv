@@ -1,0 +1,10 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+ObjectDetectionFramework,org.objectdetection,App,316,0,26,0,77,0,20,0,6,0
+ObjectDetectionFramework,org.objectdetection.plugin.visualization,HeatMapVisualization,291,0,28,0,52,0,19,0,5,0
+ObjectDetectionFramework,org.objectdetection.plugin.visualization,BarChartVisualization,107,0,2,0,24,0,6,0,5,0
+ObjectDetectionFramework,org.objectdetection.plugin.visualization,PieChartVisualization,118,0,2,0,24,0,6,0,5,0
+ObjectDetectionFramework,org.objectdetection.framework,Framework,160,149,14,4,42,40,11,7,3,6
+ObjectDetectionFramework,org.objectdetection.framework,DetectionData,10,124,1,13,2,25,3,10,2,4
+ObjectDetectionFramework,org.objectdetection.framework,ImageSource,0,51,0,0,0,13,0,6,0,6
+ObjectDetectionFramework,org.objectdetection.plugin.data,MemesData,86,0,4,0,21,0,6,0,4,0
+ObjectDetectionFramework,org.objectdetection.plugin.data,FrameCaptureData,112,0,4,0,26,0,7,0,5,0

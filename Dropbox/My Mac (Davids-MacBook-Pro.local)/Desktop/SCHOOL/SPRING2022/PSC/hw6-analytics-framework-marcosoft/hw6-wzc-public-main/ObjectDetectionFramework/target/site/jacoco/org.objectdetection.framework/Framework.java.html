@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Framework.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ObjectDetectionFramework</a> &gt; <a href="index.source.html" class="el_package">org.objectdetection.framework</a> &gt; <span class="el_source">Framework.java</span></div><h1>Framework.java</h1><pre class="source lang-java linenums">package org.objectdetection.framework;
+import java.awt.*;
+import java.io.*;
+import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import com.clarifai.credentials.ClarifaiCallCredentials;
+import com.clarifai.grpc.api.*;
+import com.clarifai.grpc.api.Image;
+import com.clarifai.grpc.api.status.*;
+import com.clarifai.channel.ClarifaiChannel;
+import com.google.protobuf.ByteString;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+
+public class Framework {
+	private PostModelOutputsRequest.Builder builder;
+	private V2Grpc.V2BlockingStub stub;
+	private DetectionData detectionData;
+	private DataPlugin dataPlugin;
+	private VisualizationPlugin visualizationPlugin;
+
+	/**
+	 * Initialize the framework with data plugin and visualization plugin.
+	 * @param dataPlugin The data plugin.
+	 * @param visualizationPlugin The visualization plugin.
+	 */
+<span class="fc" id="L31">	public Framework(DataPlugin dataPlugin, VisualizationPlugin visualizationPlugin) {</span>
+<span class="fc" id="L32">		builder = PostModelOutputsRequest.newBuilder().setModelId(&quot;image-general-segmentation&quot;);</span>
+<span class="fc" id="L33">		stub = V2Grpc.newBlockingStub(ClarifaiChannel.INSTANCE.getGrpcChannel())</span>
+<span class="fc" id="L34">				.withCallCredentials(new ClarifaiCallCredentials(getKey()));</span>
+<span class="fc" id="L35">		this.dataPlugin = dataPlugin;</span>
+<span class="fc" id="L36">		this.visualizationPlugin = visualizationPlugin;</span>
+<span class="fc" id="L37">	}</span>
+
+	/**
+	 * Run the framework.
+	 */
+	public void runFramework() {
+		// Load arguments from config file and initialize plugins.
+<span class="nc" id="L44">		initializePlugins();</span>
+		// Run data plugin and extract images.
+<span class="nc" id="L46">		extractImages();</span>
+		// Run object detection web API.
+<span class="nc" id="L48">		objectDetection();</span>
+		// Run visualization plugin and render webpage for visualization.
+<span class="nc" id="L50">		renderVisualization(true);</span>
+<span class="nc" id="L51">	}</span>
+
+	/**
+	 * Use visualization plugin to render an HTML page. The page could pop up in user's browser if the option is turned on.
+	 * This method should be called in the order of framework's life cycle.
+	 * @param popUp Whether the page is to pop up in the user's browser.
+	 * @return The string of the HTML page.
+	 */
+	public String renderVisualization(boolean popUp) {
+<span class="fc" id="L60">		String html = visualizationPlugin.visualizeData(detectionData);</span>
+		try {
+<span class="fc" id="L62">			BufferedWriter htmlFile = new BufferedWriter(new FileWriter(&quot;index.html&quot;));</span>
+<span class="fc" id="L63">			htmlFile.write(html);</span>
+<span class="fc" id="L64">			htmlFile.close();</span>
+<span class="pc bpc" id="L65" title="1 of 2 branches missed.">			if (popUp) {</span>
+<span class="nc" id="L66">				File webpage = new File(&quot;index.html&quot;);</span>
+<span class="nc" id="L67">				Desktop.getDesktop().browse(webpage.toURI());</span>
+			}
+<span class="nc" id="L69">		} catch (IOException e) {</span>
+<span class="nc" id="L70">			System.out.println(e);</span>
+<span class="fc" id="L71">		}</span>
+<span class="fc" id="L72">		return html;</span>
+	}
+
+	/**
+	 * Initialize the data plugin and the visualization plugin.
+	 * This method should be called in the order of framework's life cycle.
+	 */
+	public void initializePlugins() {
+		try {
+<span class="fc" id="L81">			JSONParser parser = new JSONParser();</span>
+<span class="fc" id="L82">			JSONObject pluginJSON = (JSONObject) parser.parse(new FileReader(&quot;src/main/resources/config.json&quot;));</span>
+<span class="fc" id="L83">			JSONObject dataJSON = (JSONObject) pluginJSON.get(dataPlugin.getPluginName());</span>
+<span class="fc" id="L84">			JSONObject visualizationJSON = (JSONObject) pluginJSON.get(visualizationPlugin.getPluginName());</span>
+<span class="fc" id="L85">			dataPlugin.initialize(dataJSON);</span>
+<span class="fc" id="L86">			visualizationPlugin.initialize(visualizationJSON);</span>
+<span class="nc" id="L87">		} catch (Exception e) {</span>
+<span class="nc" id="L88">			System.out.println(e);</span>
+<span class="fc" id="L89">		}</span>
+<span class="fc" id="L90">	}</span>
+
+	private String getKey() {
+<span class="fc" id="L93">		String apiKey = &quot;&quot;;</span>
+		try {
+<span class="fc" id="L95">			JSONParser parser = new JSONParser();</span>
+<span class="fc" id="L96">			JSONObject pluginJSON = (JSONObject) parser.parse(new FileReader(&quot;src/main/resources/config.json&quot;));</span>
+<span class="fc" id="L97">			apiKey = (String) pluginJSON.get(&quot;apiKey&quot;);</span>
+<span class="nc" id="L98">		} catch (Exception e) {</span>
+<span class="nc" id="L99">			System.out.println(e);</span>
+<span class="fc" id="L100">		}</span>
+<span class="fc" id="L101">		return apiKey;</span>
+	}
+
+	private void objectDetection() {
+		// read the request body
+<span class="nc" id="L106">		MultiOutputResponse postModelOutputsResponse = stub.postModelOutputs(builder.build());</span>
+
+<span class="nc bnc" id="L108" title="All 2 branches missed.">		if (postModelOutputsResponse.getStatus().getCode() != StatusCode.SUCCESS) {</span>
+<span class="nc" id="L109">			throw new RuntimeException(&quot;Unsuccessful request from web API: &quot; + postModelOutputsResponse.getStatus());</span>
+		}
+
+		// Parse the response from web api and convert the results to detection data.
+<span class="nc" id="L113">		List&lt;Map&lt;String, Float&gt;&gt; detectionResult = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L114" title="All 2 branches missed.">		for (int i = 0; i &lt; postModelOutputsResponse.getOutputsCount(); i++) {</span>
+<span class="nc" id="L115">			Map&lt;String, Float&gt; currentImageData = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L116">			List&lt;Region&gt; regionList = postModelOutputsResponse.getOutputs(i).getData().getRegionsList();</span>
+<span class="nc bnc" id="L117" title="All 2 branches missed.">			for (Region region : regionList) {</span>
+<span class="nc bnc" id="L118" title="All 2 branches missed.">				for (Concept concept : region.getData().getConceptsList()) {</span>
+<span class="nc bnc" id="L119" title="All 2 branches missed.">					if (!concept.getName().equals(&quot;unlabeled&quot;)) {</span>
+<span class="nc" id="L120">						currentImageData.put(concept.getName(), concept.getValue());</span>
+					}
+<span class="nc" id="L122">				}</span>
+<span class="nc" id="L123">			}</span>
+<span class="nc" id="L124">			detectionResult.add(currentImageData);</span>
+		}
+<span class="nc" id="L126">		detectionData = new DetectionData(detectionResult);</span>
+<span class="nc" id="L127">		System.out.println(&quot;Request from web API successfully.&quot;);</span>
+<span class="nc" id="L128">	}</span>
+
+	/**
+	 * Extract the images using the data plugin.
+	 * This method should be called in the order of framework's life cycle.
+	 * @return The number of images extracted by the data plugin.
+	 */
+	public int extractImages() {
+<span class="fc" id="L136">		ImageSource source = dataPlugin.inputImages();</span>
+<span class="fc" id="L137">		int count = 0;</span>
+<span class="fc bfc" id="L138" title="All 2 branches covered.">		for (int i = 0; i &lt; source.size(); i++) {</span>
+<span class="pc bpc" id="L139" title="1 of 2 branches missed.">			if (source.getType(i).equals(&quot;url&quot;)) {</span>
+<span class="fc" id="L140">				addImageByURL(source.getLocation(i));</span>
+<span class="nc bnc" id="L141" title="All 2 branches missed.">			} else if (source.getType(i).equals(&quot;path&quot;)) {</span>
+<span class="nc" id="L142">				addImageByPath(source.getLocation(i));</span>
+			}
+<span class="fc" id="L144">			count += 1;</span>
+		}
+<span class="fc" id="L146">		return count;</span>
+	}
+
+	private void addImageByURL(String url) {
+<span class="fc" id="L150">		builder.addInputs(</span>
+<span class="fc" id="L151">			Input.newBuilder().setData(</span>
+<span class="fc" id="L152">				Data.newBuilder().setImage(</span>
+<span class="fc" id="L153">					Image.newBuilder().setUrl(url)</span>
+				)
+			)
+		);
+<span class="fc" id="L157">	}</span>
+
+	private void addImageByPath(String path) {
+		try {
+<span class="nc" id="L161">			builder.addInputs(</span>
+<span class="nc" id="L162">				Input.newBuilder().setData(</span>
+<span class="nc" id="L163">					Data.newBuilder().setImage(</span>
+<span class="nc" id="L164">						Image.newBuilder()</span>
+<span class="nc" id="L165">							.setBase64(ByteString.copyFrom(Files.readAllBytes(</span>
+<span class="nc" id="L166">								new File(path).toPath()</span>
+							)))
+					)
+				)
+			);
+<span class="nc" id="L171">		} catch(IOException e) {</span>
+<span class="nc" id="L172">			System.out.println(&quot;Cannot read file: &quot; + path);</span>
+<span class="nc" id="L173">		}</span>
+<span class="nc" id="L174">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

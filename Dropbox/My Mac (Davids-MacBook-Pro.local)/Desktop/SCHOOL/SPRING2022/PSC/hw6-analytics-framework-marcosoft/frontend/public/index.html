@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Game Framework</title>
+  <script>
+    /* When the user clicks on the button,
+    toggle between hiding and showing the dropdown content */
+    function myFunction() {
+      document.getElementById("myDropdown").classList.toggle("show");
+    }
+
+    function myFunction2() {
+      document.getElementById("myDropdown2").classList.toggle("show");
+    }
+
+    function myFunction3() {
+      console.log("---------" + document.getElementById("querycnt").value);
+    }
+
+    // Close the dropdown menu if the user clicks outside of it
+    window.onclick = function (event) {
+      if (!event.target.matches('.dropbtn')) {
+        var dropdowns = document.getElementsByClassName("dropdown-content");
+        var i;
+        for (i = 0; i < dropdowns.length; i++) {
+          var openDropdown = dropdowns[i];
+          if (openDropdown.classList.contains('show')) {
+            openDropdown.classList.remove('show');
+          }
+        }
+      }
+    }
+  </script>
+
+</head>
+
+<body>
+
+  <div id="root">
+  </div>
+  <div id="handlebars">
+    <div id="game_name">{{name}}</div>
+    <div id="board">
+    </div>
+    <div id="bottombar">
+      <button onclick="myFunction()" class="dropbtn">Select Data Plugin</button>
+      <div id="myDropdown" class="dropdown-content">
+        {{#each dataPlugins}}
+        <a href="{{link}}">{{name}}</a>
+        {{/each}}
+      </div>
+    </div>
+    <div id="bottombar2">
+      <button onclick="myFunction2()" class="dropbtn">Select Visualization Plugin</button>
+      <div id="myDropdown2" class="dropdown-content">
+        {{#each visPlugins}}
+        <a href="{{link}}">{{name}}</a>
+        {{/each}}
+      </div>
+    </div>
+    <div id="bottombar3">
+      <label for="querycnt">Enter Query Count</label><input class="dropbtn" id="querycnt"/>
+    </div>
+    <div id="bottombar4">
+      <a href="/play?x=war&y="><button onclick="myFunction3()" class="dropbtn">Visualize</button></a>
+    </div>
+  </div>
+</body>
+
+</html>

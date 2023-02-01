@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MemesData.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ObjectDetectionFramework</a> &gt; <a href="index.source.html" class="el_package">org.objectdetection.plugin.data</a> &gt; <span class="el_source">MemesData.java</span></div><h1>MemesData.java</h1><pre class="source lang-java linenums">package org.objectdetection.plugin.data;
+
+import org.apache.commons.io.IOUtils;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+import org.objectdetection.framework.DataPlugin;
+import org.objectdetection.framework.ImageSource;
+
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.nio.charset.Charset;
+
+<span class="nc" id="L16">public class MemesData implements DataPlugin {</span>
+    private int num;
+
+    /**
+     * Get the name of the plugin.
+     * @return The name of the plugin.
+     */
+    public String getPluginName() {
+<span class="nc" id="L24">        return &quot;Memes Plugin&quot;;</span>
+    }
+
+    /**
+     * Get the number of images from the json file.
+     * @param args A json object that contains the arguments of the plugin.
+     */
+    public void initialize(JSONObject args) {
+<span class="nc" id="L32">        num = (int)((long) args.get(&quot;num&quot;));</span>
+<span class="nc" id="L33">    }</span>
+
+    /**
+     * Get URLs from a json file and add images to the dataset by URLs.
+     * @return A dataset of the images.
+     */
+    public ImageSource inputImages() {
+        String json;
+        int num;
+<span class="nc" id="L42">        ImageSource source = new ImageSource();</span>
+
+        try {
+            // Get the URLs in the json file
+<span class="nc" id="L46">            json = IOUtils.toString(new URI(&quot;https://api.imgflip.com/get_memes&quot;), Charset.forName(&quot;UTF-8&quot;));</span>
+<span class="nc" id="L47">            JSONParser parser = new JSONParser();</span>
+<span class="nc" id="L48">            JSONObject meme = (JSONObject) parser.parse(json);</span>
+<span class="nc" id="L49">            JSONObject data = (JSONObject) meme.get(&quot;data&quot;);</span>
+<span class="nc" id="L50">            JSONArray memes = (JSONArray) data.get(&quot;memes&quot;);</span>
+
+            // The number of images
+<span class="nc bnc" id="L53" title="All 2 branches missed.">            if(this.num &gt; memes.size()){</span>
+<span class="nc" id="L54">                num = meme.size();</span>
+            } else {
+<span class="nc" id="L56">                num = this.num;</span>
+            }
+
+            // Add to the dataset
+<span class="nc bnc" id="L60" title="All 2 branches missed.">            for(int i = 0; i &lt; num; i++){</span>
+<span class="nc" id="L61">                String pic = (String)((JSONObject) memes.get(i)).get(&quot;url&quot;);</span>
+<span class="nc" id="L62">                pic = pic.replaceAll(&quot;\\\\&quot;,&quot;&quot;);</span>
+<span class="nc" id="L63">                source.addImageByURL(pic);</span>
+            }
+<span class="nc" id="L65">        } catch (IOException | URISyntaxException | ParseException e) {</span>
+<span class="nc" id="L66">            e.printStackTrace();</span>
+<span class="nc" id="L67">        }</span>
+
+<span class="nc" id="L69">        return source;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

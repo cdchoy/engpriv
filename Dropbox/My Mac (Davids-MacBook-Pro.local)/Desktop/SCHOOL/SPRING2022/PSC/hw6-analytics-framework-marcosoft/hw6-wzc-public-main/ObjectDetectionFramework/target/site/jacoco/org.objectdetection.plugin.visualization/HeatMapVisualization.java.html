@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>HeatMapVisualization.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ObjectDetectionFramework</a> &gt; <a href="index.source.html" class="el_package">org.objectdetection.plugin.visualization</a> &gt; <span class="el_source">HeatMapVisualization.java</span></div><h1>HeatMapVisualization.java</h1><pre class="source lang-java linenums">package org.objectdetection.plugin.visualization;
+
+import org.icepear.echarts.Heatmap;
+import org.icepear.echarts.charts.heatmap.HeatmapSeries;
+import org.icepear.echarts.render.Engine;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.objectdetection.framework.DetectionData;
+import org.objectdetection.framework.VisualizationPlugin;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+<span class="nc" id="L15">public class HeatMapVisualization implements VisualizationPlugin {</span>
+    private int num;
+    private JSONArray objects;
+
+    /**
+     * Get the name of the plugin.
+     * @return The name of the plugin.
+     */
+    public String getPluginName() {
+<span class="nc" id="L24">        return &quot;Heat Map Plugin&quot;;</span>
+    }
+
+    /**
+     * Get the number of images to show in the heatmap
+     * and the objects specified by the user from the
+     * json file.
+     * @param args A json object that contains the arguments of the plugin.
+     */
+    public void initialize(JSONObject args) {
+<span class="nc" id="L34">        num = (int)((long) args.get(&quot;num&quot;));</span>
+<span class="nc" id="L35">        objects = (JSONArray) args.get(&quot;objects&quot;);</span>
+<span class="nc" id="L36">    }</span>
+
+    /**
+     * Visualize the detection data to a heatmap
+     * @param data The detection result of given images.
+     * @return An HTML string represents the generated heatmap.
+     */
+    public String visualizeData(DetectionData data) {
+<span class="nc" id="L44">        return renderHeatMap(data);</span>
+    }
+
+    private String renderHeatMap(DetectionData data) {
+<span class="nc" id="L48">        Map&lt;String, Integer&gt; chartData = data.overviewObjects();</span>
+<span class="nc" id="L49">        int size = chartData.size();</span>
+<span class="nc bnc" id="L50" title="All 2 branches missed.">        int numOfObject = (num &lt; size ? num:size);</span>
+<span class="nc" id="L51">        String[] title = new String[size];</span>
+<span class="nc" id="L52">        int[] num  = new int[size];</span>
+<span class="nc" id="L53">        String[] result  = new String[numOfObject];</span>
+<span class="nc" id="L54">        int i = 0, j, index, max;</span>
+<span class="nc" id="L55">        int imageNum = data.getImageNumber();</span>
+<span class="nc" id="L56">        String[] picName  = new String[imageNum];</span>
+<span class="nc" id="L57">        List&lt;Number[]&gt; arrayData = new ArrayList&lt;&gt;();</span>
+
+        // If the user specifies the objects, it only generates the
+        // specified objects. Otherwise, it generates the most frequent
+        // objects
+<span class="nc bnc" id="L62" title="All 2 branches missed.">        if(objects.size() == 0){</span>
+            // Get the overview data of objects
+<span class="nc bnc" id="L64" title="All 2 branches missed.">            for (String key : chartData.keySet()) {</span>
+<span class="nc" id="L65">                title[i] = key;</span>
+<span class="nc" id="L66">                num[i] = chartData.get(key);</span>
+<span class="nc" id="L67">                i++;</span>
+<span class="nc" id="L68">            }</span>
+
+            // Find the most frequent objects
+<span class="nc bnc" id="L71" title="All 2 branches missed.">            for(i = 0; i &lt; numOfObject; i++){</span>
+<span class="nc" id="L72">                index = 0;</span>
+<span class="nc" id="L73">                max = -1;</span>
+<span class="nc bnc" id="L74" title="All 2 branches missed.">                for(j = 0; j &lt; size; j++){</span>
+<span class="nc bnc" id="L75" title="All 2 branches missed.">                    if(num[j] &gt; max){</span>
+<span class="nc" id="L76">                        index = j;</span>
+<span class="nc" id="L77">                        max = num[j];</span>
+                    }
+                }
+<span class="nc" id="L80">                result[i] = title[index];</span>
+<span class="nc" id="L81">                num[index] = -1;</span>
+            }
+
+            // Generate the data for heatmap
+<span class="nc bnc" id="L85" title="All 2 branches missed.">            for(i = 0; i &lt; imageNum; i++) {</span>
+<span class="nc" id="L86">                Map&lt;String, Float&gt; map = data.getDetectionResult(i);</span>
+<span class="nc bnc" id="L87" title="All 2 branches missed.">                for (j = 0; j &lt; numOfObject; j++) {</span>
+<span class="nc bnc" id="L88" title="All 2 branches missed.">                    arrayData.add(new Number[]{i, j, map.containsKey(result[j]) ? 1 : null});</span>
+                }
+            }
+        } else {
+<span class="nc" id="L92">            result  = new String[objects.size()];</span>
+            // Objects specified by user
+<span class="nc bnc" id="L94" title="All 2 branches missed.">            for(i = 0; i &lt; objects.size(); i++){</span>
+<span class="nc" id="L95">                result[i] = ((String)objects.get(i)).toLowerCase();</span>
+            }
+
+            // Generate the data for heatmap
+<span class="nc bnc" id="L99" title="All 2 branches missed.">            for(i = 0; i &lt; imageNum; i++) {</span>
+<span class="nc" id="L100">                Map&lt;String, Float&gt; map = data.getDetectionResult(i);</span>
+<span class="nc bnc" id="L101" title="All 2 branches missed.">                for (j = 0; j &lt; objects.size(); j++) {</span>
+<span class="nc bnc" id="L102" title="All 2 branches missed.">                    arrayData.add(new Number[]{i, j, map.containsKey(result[j]) ? 1 : null});</span>
+                }
+            }
+        }
+
+        // Give names to pictures
+<span class="nc bnc" id="L108" title="All 2 branches missed.">        for(i = 0; i &lt; imageNum; i++){</span>
+<span class="nc" id="L109">            picName[i] = &quot;p&quot; + i;</span>
+        }
+
+        // Generate heatmap
+<span class="nc" id="L113">        Heatmap heatmap = new Heatmap()</span>
+<span class="nc" id="L114">                .addXAxis(picName)</span>
+<span class="nc" id="L115">                .addYAxis(result)</span>
+<span class="nc" id="L116">                .setVisualMap(0, 1)</span>
+<span class="nc" id="L117">                .addSeries(new HeatmapSeries().setName(&quot;Image data&quot;)</span>
+<span class="nc" id="L118">                        .setData(arrayData.toArray()));</span>
+<span class="nc" id="L119">        Engine engine = new Engine();</span>
+<span class="nc" id="L120">        return engine.renderHtml(heatmap);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

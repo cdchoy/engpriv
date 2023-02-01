@@ -1,0 +1,5 @@
+org/objectdetection/framework/ImageSourceTest.class
+org/objectdetection/framework/VisualizationPluginStub.class
+org/objectdetection/framework/FrameworkTest.class
+org/objectdetection/framework/DataPluginStub.class
+org/objectdetection/framework/DetectionDataTest.class
